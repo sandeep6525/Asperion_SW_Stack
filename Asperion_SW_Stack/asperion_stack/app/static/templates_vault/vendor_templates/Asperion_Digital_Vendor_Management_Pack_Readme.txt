@@ -1,0 +1,42 @@
+Asperion_Digital_Vendor_Management_and_Outsourcing_Pack
+
+Company: ASPERION DIGITAL TECHNOLOGIES (OPC) PRIVATE LIMITED
+CIN: U85500KA2026OPC222069
+Registered Office: Flat No.304, 3 Floor, Type4, Lakshith Properties, Horamavu, Bangalore North, Bangalore - 560043, Karnataka, India
+Prepared on: 14 Jun 2026
+
+This pack contains editable vendor management and outsourcing documents, templates, registers and dashboard workbook for company-wide use.
+
+Recommended adoption steps:
+1. Tailor placeholders for your actual approval limits, functions, vendors, tasks, risk appetite and document repository.
+2. Ask CA/finance to validate GST, TDS, withholding, MSME and payment-control treatment.
+3. Ask legal counsel to finalize NDA/MSA/SOW/SLA, IP, confidentiality, liability, dispute, termination and stamp-duty requirements.
+4. Ask IT/security/privacy owners to approve vendor access, DPDP/privacy, cybersecurity, AI-tool and data-handling controls.
+5. Train business owners and project managers to use the registers before onboarding, granting access or paying vendors.
+
+Files included:
+- Asperion_Digital_Vendor_Management_Operating_Model_and_Capability_Blueprint.docx
+- Asperion_Digital_Vendor_Roles_RACI_and_Cross_Functional_Team_Structure.docx
+- Asperion_Digital_Vendor_Onboarding_Due_Diligence_KYC_and_Risk_Assessment_Template.docx
+- Asperion_Digital_Vendor_Sourcing_Evaluation_Comparative_Statement_and_Selection_Template.docx
+- Asperion_Digital_Vendor_Contract_SOW_SLA_PO_and_Service_Order_Template.docx
+- Asperion_Digital_Vendor_Security_Privacy_DPDP_and_Compliance_Assessment_Template.docx
+- Asperion_Digital_Vendor_Performance_Scorecard_QBR_and_Relationship_Governance_SOP.docx
+- Asperion_Digital_Vendor_Invoice_Payment_GST_TDS_PO_GRN_and_Finance_Control_SOP.docx
+- Asperion_Digital_Vendor_Issue_Escalation_Breach_Change_Renewal_Exit_and_Transition_SOP.docx
+- Asperion_Digital_Vendor_Master_Agreement_and_Outsourcing_Terms_Template.docx
+- Asperion_Digital_Vendor_Management_Forms_Registers_and_Template_Catalogue.docx
+- Asperion_Digital_Vendor_Management_Operating_Model_and_Capability_Blueprint.pdf
+- Asperion_Digital_Vendor_Roles_RACI_and_Cross_Functional_Team_Structure.pdf
+- Asperion_Digital_Vendor_Onboarding_Due_Diligence_KYC_and_Risk_Assessment_Template.pdf
+- Asperion_Digital_Vendor_Sourcing_Evaluation_Comparative_Statement_and_Selection_Template.pdf
+- Asperion_Digital_Vendor_Contract_SOW_SLA_PO_and_Service_Order_Template.pdf
+- Asperion_Digital_Vendor_Security_Privacy_DPDP_and_Compliance_Assessment_Template.pdf
+- Asperion_Digital_Vendor_Performance_Scorecard_QBR_and_Relationship_Governance_SOP.pdf
+- Asperion_Digital_Vendor_Invoice_Payment_GST_TDS_PO_GRN_and_Finance_Control_SOP.pdf
+- Asperion_Digital_Vendor_Issue_Escalation_Breach_Change_Renewal_Exit_and_Transition_SOP.pdf
+- Asperion_Digital_Vendor_Master_Agreement_and_Outsourcing_Terms_Template.pdf
+- Asperion_Digital_Vendor_Management_Forms_Registers_and_Template_Catalogue.pdf
+- Asperion_Digital_Vendor_Management_Registers_and_Dashboard_Workbook.xlsx
+
+Note: These are business templates and should not be treated as final legal, tax, accounting, HR, cybersecurity or compliance advice.
