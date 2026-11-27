@@ -1,0 +1,228 @@
+{
+  "loadGovernance": {
+    "endpoints": [],
+    "element_ids": [
+      "table-audit-logs",
+      "table-compliance",
+      "table-policies",
+      "table-resolutions"
+    ],
+    "body_snippet": "async function loadGovernance() {\n    try {\n        const [resResolutions, resCompliance, resPolicies, resAuditLogs] = await Promise.all([\n            fetch(`${API_BASE}/governance/resolutions`).then(r => r.json()),\n            fetch(`${API_BASE}/governance/compliance-calendar`).then(r => r.json()),..."
+  },
+  "loadSDLC": {
+    "endpoints": [],
+    "element_ids": [
+      "sdlc-stat-adrs",
+      "sdlc-stat-coverage",
+      "sdlc-stat-latency",
+      "sdlc-stat-pipeline-gate",
+      "sdlc-stat-release",
+      "sdlc-stat-reqs",
+      "sre-budget-val",
+      "sre-cpu-val",
+      "sre-error-rate-val",
+      "sre-mem-val"
+    ],
+    "body_snippet": "async function loadSDLC() {\n    try {\n        const [resReqs, resAdrs, resPrs, resPipes, resBugs, resReleases, resObs, resOverview] = await Promise.all([\n            fetch(`${API_BASE}/sdlc/requirements`).then(r => r.json()),\n            fetch(`${API_BASE}/sdlc/adrs`).then(r => r.json()),\n          ..."
+  },
+  "loadProcurement": {
+    "endpoints": [],
+    "element_ids": [
+      "kpi-procure-contracts",
+      "kpi-procure-events",
+      "kpi-procure-grns",
+      "kpi-procure-msme",
+      "kpi-procure-prs",
+      "kpi-procure-rating",
+      "kpi-procure-savings",
+      "kpi-procure-spend",
+      "table-grns",
+      "table-purchase-requisitions"
+    ],
+    "body_snippet": "async function loadProcurement() {\n    try {\n        const [\n            resOverview, resEvents, resPRs, resVendors,\n            resContracts, resGRNs, resScorecards, resRisks,\n            resCAPAs, resCategories, resRFPs\n        ] = await Promise.all([\n            fetch(`${API_BASE}/procurement/ove..."
+  },
+  "loadGuardrails": {
+    "endpoints": [],
+    "element_ids": [
+      "guardrail-kpi-active",
+      "guardrail-kpi-blocked",
+      "guardrail-kpi-evals",
+      "guardrail-kpi-score"
+    ],
+    "body_snippet": "async function loadGuardrails() {\n    try {\n        // 1. Fetch Overview Telemetry\n        const overRes = await fetch(`${API_BASE}/guardrails/overview`);\n        if (overRes.ok) {\n            const over = await overRes.json();\n            const scoreEl = document.getElementById('guardrail-kpi-score..."
+  },
+  "loadISOStandardsModule": {
+    "endpoints": [],
+    "element_ids": [
+      "iso-kpi-audits",
+      "iso-kpi-audits-sub",
+      "iso-kpi-csat",
+      "iso-kpi-grievances",
+      "iso-kpi-score",
+      "iso-kpi-standards"
+    ],
+    "body_snippet": "async function loadISOStandardsModule() {\n    try {\n        // 1. Overview Telemetry\n        const overRes = await fetch(`${API_BASE}/iso-standards/overview`);\n        if (overRes.ok) {\n            const data = await overRes.json();\n            const scoreEl = document.getElementById('iso-kpi-score'..."
+  },
+  "loadAICloudModule": {
+    "endpoints": [],
+    "element_ids": [
+      "ai-kpi-certs",
+      "ai-kpi-cloud",
+      "ai-kpi-cloud-spend",
+      "ai-kpi-mcp",
+      "ai-kpi-spend",
+      "ai-kpi-util"
+    ],
+    "body_snippet": "async function loadAICloudModule() {\n    try {\n        // 1. Overview Telemetry\n        const overRes = await fetch(`${API_BASE}/ai-cloud/overview`);\n        if (overRes.ok) {\n            const data = await overRes.json();\n            const spendEl = document.getElementById('ai-kpi-spend');\n        ..."
+  },
+  "loadAgenticAI": {
+    "endpoints": [],
+    "element_ids": [
+      "kpi-agentic-active-agents",
+      "kpi-agentic-approval-gates",
+      "kpi-agentic-grounded-tools",
+      "kpi-agentic-guardrail-pass",
+      "kpi-agentic-success-rate",
+      "kpi-agentic-total-missions"
+    ],
+    "body_snippet": "async function loadAgenticAI() {\n    try {\n        const [overviewRes, agentsRes, missionsRes] = await Promise.all([\n            fetch(`${API_BASE}/agentic-ai/overview`).then(r => r.json()).catch(() => null),\n            fetch(`${API_BASE}/agentic-ai/agents`).then(r => r.json()).catch(() => []),\n   ..."
+  },
+  "loadOperations": {
+    "endpoints": [],
+    "element_ids": [],
+    "body_snippet": "async function loadOperations() {\n    await Promise.all([\n        loadOperationsOverview(),\n        loadOperationsLedger(),\n        loadOperationsSnapshots(),\n        loadOperationsConsents(),\n        loadOperationsTelemetry()\n    ]);\n}..."
+  },
+  "loadCryptoTools": "NOT_FOUND",
+  "loadInfrastructure": {
+    "endpoints": [],
+    "element_ids": [
+      "infra-kpi-cloud",
+      "infra-kpi-dr",
+      "infra-kpi-hardware",
+      "infra-kpi-passkeys",
+      "table-assets",
+      "table-certs",
+      "table-cloud",
+      "table-dr-simulations",
+      "table-iam",
+      "table-passkeys-directory"
+    ],
+    "body_snippet": "async function loadInfrastructure() {\n    try {\n        const [\n            resOverview,\n            resPasskeys,\n            resZTNA,\n            resDR,\n            resAssets,\n            resCloud,\n            resIAM,\n            resCerts,\n            resChecklists\n        ] = await Promise.all([\n ..."
+  },
+  "loadSecOps": {
+    "endpoints": [],
+    "element_ids": [
+      "secops-kpi-active-incidents",
+      "secops-kpi-certin-sla",
+      "secops-kpi-evidence-count",
+      "secops-kpi-threat-iocs",
+      "table-incidents",
+      "table-playbooks",
+      "table-secops-alerts",
+      "table-secops-certin-reports",
+      "table-secops-drills",
+      "table-secops-evidence"
+    ],
+    "body_snippet": "async function loadSecOps() {\n    try {\n        const [\n            resOverview,\n            resIncidents,\n            resAlerts,\n            resEvidence,\n            resIOCs,\n            resPlaybooks,\n            resVulns,\n            resDrills,\n            resReports\n        ] = await Promise.all(..."
+  },
+  "loadVault": {
+    "endpoints": [],
+    "element_ids": [
+      "vault-total-badge"
+    ],
+    "body_snippet": "async function loadVault() {\n    try {\n        const [resCats, resDocs, resStats] = await Promise.all([\n            fetch(`${API_BASE}/vault/categories`).then(r => r.json()),\n            fetch(`${API_BASE}/vault/documents`).then(r => r.json()),\n            fetch(`${API_BASE}/vault/stats`).then(r => ..."
+  },
+  "loadStrategy": {
+    "endpoints": [],
+    "element_ids": [
+      "stat-decisions-count",
+      "stat-functions-count",
+      "stat-kpi-health",
+      "stat-roadmap-count",
+      "table-capability-capacity",
+      "table-enterprise-kpis",
+      "table-strategic-functions",
+      "table-strategic-thoughts",
+      "table-strategy-roadmap"
+    ],
+    "body_snippet": "async function loadStrategy() {\n    try {\n        const [resSummary, resFuncs, resCaps, resKPIs, resThoughts, resRoadmap] = await Promise.all([\n            fetch(`${API_BASE}/strategy/summary`).then(r => r.json()),\n            fetch(`${API_BASE}/strategy/functions`).then(r => r.json()),\n            ..."
+  },
+  "loadAnalyticsHub": {
+    "endpoints": [],
+    "element_ids": [],
+    "body_snippet": "async function loadAnalyticsHub() {\n    switchAnalyticsTab(currentAnalyticsTab);\n}..."
+  },
+  "loadInternalSupport": {
+    "endpoints": [],
+    "element_ids": [],
+    "body_snippet": "async function loadInternalSupport() {\n    try {\n        const [sumResp, tktResp, notifResp] = await Promise.all([\n            fetch(`${API_BASE}/internal-support/summary`),\n            fetch(`${API_BASE}/internal-support/tickets`),\n            fetch(`${API_BASE}/internal-support/notifications?limit..."
+  },
+  "loadITSM": {
+    "endpoints": [],
+    "element_ids": [
+      "itsm-stat-cab",
+      "itsm-stat-fixes",
+      "itsm-stat-health",
+      "itsm-stat-kedb",
+      "itsm-stat-loi",
+      "itsm-stat-nodes"
+    ],
+    "body_snippet": "async function loadITSM() {\n    try {\n        // 1. Fetch Executive Overview\n        const res = await fetch(`${API_BASE}/itsm/overview`).then(r => r.json());\n        if (res.status === 'success') {\n            const m = res.metrics;\n            const elNodes = document.getElementById('itsm-stat-nod..."
+  },
+  "loadTeams": {
+    "endpoints": [],
+    "element_ids": [
+      "teams-stat-channels",
+      "teams-stat-huddles",
+      "teams-stat-messages",
+      "teams-stat-online"
+    ],
+    "body_snippet": "async function loadTeams() {\n    try {\n        const [resOverview, resChannels, resPresence] = await Promise.all([\n            fetch(`${API_BASE}/communications/overview`).then(r => r.json()).catch(() => null),\n            fetch(`${API_BASE}/communications/channels`).then(r => r.json()),\n           ..."
+  },
+  "loadSharePoint": {
+    "endpoints": [
+      "/api/v1/sharepoint/overview"
+    ],
+    "element_ids": [],
+    "body_snippet": "async function loadSharePoint() {\n    try {\n        const overviewRes = await fetch('/api/v1/sharepoint/overview');\n        if (overviewRes.ok) {\n            const overview = await overviewRes.json();\n            const setVal = (id, val) => {\n                const el = document.getElementById(id);\n ..."
+  },
+  "loadTraining": {
+    "endpoints": [
+      "/api/v1/training/overview"
+    ],
+    "element_ids": [],
+    "body_snippet": "async function loadTraining() {\n    try {\n        const overviewRes = await fetch('/api/v1/training/overview');\n        if (overviewRes.ok) {\n            const overview = await overviewRes.json();\n            const setVal = (id, val) => {\n                const el = document.getElementById(id);\n     ..."
+  },
+  "loadClientPortal": {
+    "endpoints": [],
+    "element_ids": [
+      "client-bill-gross",
+      "client-bill-outstanding",
+      "client-bill-received",
+      "client-portal-selector",
+      "client-proj-budget",
+      "client-proj-code",
+      "client-proj-dates",
+      "client-proj-name",
+      "client-proj-pm",
+      "client-proj-status"
+    ],
+    "body_snippet": "async function loadClientPortal(clientName = currentClientPortalName) {\n    try {\n        currentClientPortalName = clientName;\n        const selector = document.getElementById('client-portal-selector');\n        if (selector && selector.value !== clientName) {\n            selector.value = clientName..."
+  },
+  "loadVendorPortal": {
+    "endpoints": [],
+    "element_ids": [
+      "table-vp-bills",
+      "table-vp-capas",
+      "table-vp-contracts",
+      "table-vp-grns",
+      "table-vp-pos",
+      "table-vp-rfx",
+      "table-vp-scorecards",
+      "vendor-portal-selector",
+      "vp-badge-msme",
+      "vp-badge-rating"
+    ],
+    "body_snippet": "async function loadVendorPortal(vendorQuery = null) {\n    try {\n        let url = `${API_BASE}/portals/vendor/dashboard-data`;\n        if (vendorQuery) {\n            if (typeof vendorQuery === 'number' || !isNaN(Number(vendorQuery))) {\n                url += `?vendor_id=${vendorQuery}`;\n            ..."
+  }
+}

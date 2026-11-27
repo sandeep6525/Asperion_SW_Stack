@@ -68,7 +68,7 @@ class CustomerAccountBase(BaseModel):
     primary_csm: str = "Customer Success Lead"
     executive_sponsor: str = "Varadi Vijay (Director)"
     annual_recurring_revenue_inr: float = 0.0
-    health_score: int = 95
+    health_score: float = 95.0
     health_status: str = "Healthy"
     nps_score: int = 9
     contract_start_date: date

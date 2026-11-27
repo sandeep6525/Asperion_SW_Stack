@@ -1,0 +1,229 @@
+<section id="view-crm" class="module-view hidden">
+                <!-- Balanced Two-Column Enterprise CRM Header -->
+                <div class="mb-5 grid grid-cols-1 lg:grid-cols-12 gap-4 bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-800 text-white shadow-md">
+                    <!-- Main Content Area (~67% width on desktop) -->
+                    <div class="lg:col-span-8 flex flex-col justify-between gap-4">
+                        <div class="flex items-start sm:items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-slate-950 border border-cyan-500/30 p-1.5 flex items-center justify-center shrink-0 shadow-sm">
+                                <img src="/static/img/logo.png" alt="Asperion Brand" class="w-full h-full object-contain">
+                            </div>
+                            <div class="min-w-0">
+                                <h2 class="text-lg sm:text-2xl font-bold text-white tracking-tight">
+                                    Enterprise CRM, Contracting &amp; Service Desk
+                                </h2>
+                                <p class="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+                                    Pipeline opportunities, Deal Desk approvals, customer health scores, SLA service desk, and Enterprise Risk Management (ERM).
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-950 text-blue-300 border border-blue-500/30">DEAL DESK &amp; CONTRACTS</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-950 text-cyan-300 border border-cyan-500/30">CUSTOMER HEALTH SCORING</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-950 text-emerald-300 border border-emerald-500/30">SLA SERVICE DESK</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-950 text-purple-300 border border-purple-500/30">ISO 31000 ERM</span>
+                        </div>
+                    </div>
+
+                    <!-- Right-Side Actions Panel (~33% width on desktop) -->
+                    <div class="lg:col-span-4 bg-slate-950/80 rounded-xl border border-slate-800 p-4 flex flex-col justify-between gap-3">
+                        <div class="text-xs text-slate-300 font-semibold border-b border-slate-800/80 pb-2 flex items-center justify-between">
+                            <span>CRM &amp; Contracting Actions</span>
+                            <span class="text-[10px] font-mono text-cyan-400">REVENUE OPS</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="toggleCRMModal('modal-crm-opp')" class="w-full px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition flex items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-plus"></i> New Deal / Opportunity
+                            </button>
+                            <button onclick="toggleCRMModal('modal-crm-ticket')" class="w-full px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-ticket"></i> New Support Ticket
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CRM Top Stat Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[11px] text-slate-400 font-semibold uppercase">Total Pipeline</div>
+                        <div id="crm-stat-pipeline" class="text-lg font-bold text-slate-900 mt-1">₹0</div>
+                        <div class="text-[10px] text-purple-600 mt-0.5">Gross Deal Value</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[11px] text-slate-400 font-semibold uppercase">Weighted Pipeline</div>
+                        <div id="crm-stat-weighted" class="text-lg font-bold text-emerald-700 mt-1">₹0</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Probability Adjusted</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[11px] text-slate-400 font-semibold uppercase">Active ARR</div>
+                        <div id="crm-stat-arr" class="text-lg font-bold text-blue-700 mt-1">₹0</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Recurring Contracts</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[11px] text-slate-400 font-semibold uppercase">Historical Win Rate</div>
+                        <div id="crm-stat-winrate" class="text-lg font-bold text-emerald-600 mt-1">--%</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Closed Won / Decided</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[11px] text-slate-400 font-semibold uppercase">Average CS Health</div>
+                        <div id="crm-stat-health" class="text-lg font-bold text-cyan-600 mt-1">--%</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Enterprise Accounts</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-[11px] text-slate-400 font-semibold uppercase">Open SLA Tickets</div>
+                        <div id="crm-stat-tickets" class="text-lg font-bold text-amber-600 mt-1">0</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Under Active SLA</div>
+                    </div>
+                </div>
+
+                <!-- 1. Enterprise Opportunities & Deal Desk -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-briefcase text-purple-600"></i> Enterprise Opportunities & Deal Desk
+                        </h3>
+                        <span class="text-xs text-slate-400 font-mono">Stage Advancement with Auto-Calculated Weighted Value</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th class="p-3">Deal Code</th>
+                                    <th class="p-3">Client / Opportunity</th>
+                                    <th class="p-3 text-right">Deal Value (INR)</th>
+                                    <th class="p-3">Pipeline Stage</th>
+                                    <th class="p-3 text-right">Probability %</th>
+                                    <th class="p-3 text-right">Weighted ARR</th>
+                                    <th class="p-3">Deal Desk Status</th>
+                                    <th class="p-3">Close Target</th>
+                                    <th class="p-3">Owner</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-crm-opportunities"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. Customer Success & Accounts Directory -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-building-circle-check text-emerald-600"></i> Customer Accounts & Health Scorecard
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Account</th>
+                                        <th class="p-2.5">Tier & Industry</th>
+                                        <th class="p-2.5 text-right">ARR (INR)</th>
+                                        <th class="p-2.5 text-center">Health Score</th>
+                                        <th class="p-2.5">Renewal Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-crm-accounts"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3. Customer Service Desk (SLA-Driven) -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-headset text-blue-600"></i> Support Service Desk & SLA Tracker
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Ticket #</th>
+                                        <th class="p-2.5">Client & Subject</th>
+                                        <th class="p-2.5">Severity / SLA</th>
+                                        <th class="p-2.5">Status</th>
+                                        <th class="p-2.5 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-crm-tickets"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Enterprise Risk Management (ERM) Register -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield-cat text-rose-600"></i> Enterprise Risk Management (ERM) Register (ISO 31000)
+                            </h3>
+                            <p class="text-xs text-slate-500">Inherent vs Residual Risk Priority Numbers (RPN = Severity x Probability) across all 5 risk dimensions.</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th class="p-3">Risk Code</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Risk Title & Description</th>
+                                    <th class="p-3 text-center">Inherent RPN</th>
+                                    <th class="p-3">Existing Controls</th>
+                                    <th class="p-3 text-center">Residual RPN</th>
+                                    <th class="p-3">Strategy</th>
+                                    <th class="p-3">Owner</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-crm-risks"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 5. Client Contracts & Prospect Pipeline -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-funnel-dollar text-purple-600"></i> Prospect Pipeline
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Company</th>
+                                        <th class="p-3">Contact</th>
+                                        <th class="p-3">Stage</th>
+                                        <th class="p-3">Value</th>
+                                        <th class="p-3">Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-prospects"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-file-contract text-blue-600"></i> Client Contracts Register
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Ref No</th>
+                                        <th class="p-3">Client</th>
+                                        <th class="p-3">Type</th>
+                                        <th class="p-3">Value</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">Effective</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-contracts"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 4. Finance View -->

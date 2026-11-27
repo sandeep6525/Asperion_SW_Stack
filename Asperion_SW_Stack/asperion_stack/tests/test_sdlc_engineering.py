@@ -51,7 +51,7 @@ def test_sdlc_srs_requirements_and_rtm(db_session):
     assert any(r.req_code == "ADT-REQ-002" for r in reqs)
 
     # 2. Create New SRS Requirement
-    uniq_code = f"ADT-REQ-TEST-{uuid.uuid4().hex[:4].upper()}"
+    uniq_code = f"ADT-REQ-TEST-{uuid.uuid4().hex[:8].upper()}"
     new_req = SDLCRequirementCreate(
         req_code=uniq_code,
         title="Zero Trust WebAuthn & FIDO2 Hardware Key Authentication",

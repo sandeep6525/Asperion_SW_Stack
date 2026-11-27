@@ -1,0 +1,98 @@
+<section id="view-governance" class="module-view hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Corporate Governance & OPC Registers</h2>
+                        <p class="text-sm text-slate-500">Board resolutions, MCA/ROC filings, compliance calendar, and delegation of authority.</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-gavel text-blue-600"></i> Board / Sole Director Resolutions
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Resolution No</th>
+                                        <th class="p-3">Title / Subject</th>
+                                        <th class="p-3">Category</th>
+                                        <th class="p-3">Date Passed</th>
+                                        <th class="p-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-resolutions"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-amber-600"></i> Statutory Compliance Calendar (MCA / GST / TDS / PT)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Compliance Item</th>
+                                        <th class="p-3">Statutory Authority</th>
+                                        <th class="p-3">Form / Return</th>
+                                        <th class="p-3">Due Date</th>
+                                        <th class="p-3">Frequency</th>
+                                        <th class="p-3">Penalty Risk</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-compliance"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-purple-600"></i> Corporate Policy Catalog
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Policy Code</th>
+                                        <th class="p-3">Policy Name</th>
+                                        <th class="p-3">Category</th>
+                                        <th class="p-3">Effective Date</th>
+                                        <th class="p-3">Scope / Summary</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-policies"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i> Enterprise Audit Trail (Immutable Activity Records)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Timestamp</th>
+                                        <th class="p-3">Module</th>
+                                        <th class="p-3">Severity</th>
+                                        <th class="p-3">Event Type</th>
+                                        <th class="p-3">Description</th>
+                                        <th class="p-3">Actor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-audit-logs"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 3. CRM View -->

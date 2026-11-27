@@ -1,0 +1,268 @@
+<section id="view-crypto-tools" class="module-view hidden space-y-6">
+                <!-- Header Banner -->
+                <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 p-6 rounded-2xl border border-emerald-800/60 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-400 font-mono text-xs uppercase tracking-wider mb-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            FIPS 140-3 &bull; ISO/IEC 27001 A.10 &bull; SOC 2 CC6.1 &bull; Module 23
+                        </div>
+                        <h2 class="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+                            <i class="fa-solid fa-key text-emerald-400"></i> Cryptography, PKI & Digital Attestation Tools
+                        </h2>
+                        <p class="text-sm text-slate-300 mt-1 max-w-3xl">
+                            Enterprise-grade cryptographic engine supporting AES-256-GCM authenticated encryption, Ed25519 & RSA-PSS digital signatures, SHA-256/512 digests, HMAC authentication, and Merkle tree audit roots.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="generateNewKeyPair('Ed25519')" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Generate Ed25519 Keypair
+                        </button>
+                        <button onclick="generateRandomCSPRNGToken()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-dice"></i> CSPRNG Token
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Crypto Navigation Tabs -->
+                <div class="border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <button onclick="switchCryptoTab('hashing')" id="btn-crypto-tab-hashing" class="px-4 py-2.5 text-xs font-bold border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-hashtag"></i> Hashing & HMAC
+                        </button>
+                        <button onclick="switchCryptoTab('aes-gcm')" id="btn-crypto-tab-aes-gcm" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-lock"></i> AES-256-GCM AEAD
+                        </button>
+                        <button onclick="switchCryptoTab('signatures')" id="btn-crypto-tab-signatures" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-signature"></i> Digital Signatures (Ed25519/RSA)
+                        </button>
+                        <button onclick="switchCryptoTab('merkle')" id="btn-crypto-tab-merkle" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired"></i> Merkle Tree Audit Root
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                        <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded border border-emerald-800/80">
+                            Zero-Knowledge Compliant
+                        </span>
+                    </div>
+                </div>
+
+                <!-- TAB 1: Hashing & HMAC -->
+                <div id="crypto-tab-hashing" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- SHA Hasher -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-fingerprint text-emerald-400"></i> Cryptographic Hash Generator
+                            </h3>
+                            <span class="text-[10px] font-mono text-slate-400">FIPS 180-4</span>
+                        </div>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Algorithm</label>
+                                <select id="crypto-hash-algo" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200">
+                                    <option value="SHA-256">SHA-256 (256-bit / 64 hex chars)</option>
+                                    <option value="SHA-512">SHA-512 (512-bit / 128 hex chars)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Input Data / Payload</label>
+                                <textarea id="crypto-hash-input" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono text-xs" placeholder="Type or paste payload string..."></textarea>
+                            </div>
+                            <button onclick="executeCryptoHash()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play"></i> Compute Digest
+                            </button>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Hexadecimal Digest:</span>
+                                <div id="crypto-hash-output" class="text-emerald-300 font-mono text-xs break-all select-all">--</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HMAC Authenticator -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-cyan-400"></i> HMAC-SHA256 Authenticator
+                            </h3>
+                            <span class="text-[10px] font-mono text-slate-400">RFC 2104</span>
+                        </div>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Secret Key</label>
+                                <input type="password" id="crypto-hmac-key" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono" placeholder="Enter shared secret key...">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Message String</label>
+                                <textarea id="crypto-hmac-msg" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono text-xs" placeholder="Message to authenticate..."></textarea>
+                            </div>
+                            <button onclick="executeCryptoHMAC()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play"></i> Compute HMAC
+                            </button>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">HMAC-SHA256 Signature:</span>
+                                <div id="crypto-hmac-output" class="text-cyan-300 font-mono text-xs break-all select-all">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: AES-256-GCM AEAD -->
+                <div id="crypto-tab-aes-gcm" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Encryption Box -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-lock text-indigo-400"></i> Authenticated AES-256-GCM Encryption
+                            </h3>
+                            <span class="text-[10px] font-mono text-slate-400">NIST SP 800-38D</span>
+                        </div>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Passphrase / Master Secret</label>
+                                <input type="password" id="crypto-aes-enc-pass" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono" placeholder="Enter encryption passphrase...">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Plaintext Payload</label>
+                                <textarea id="crypto-aes-enc-plaintext" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono text-xs" placeholder="Confidential payload to encrypt..."></textarea>
+                            </div>
+                            <button onclick="executeAESEncrypt()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-shield-virus"></i> Encrypt with AES-GCM
+                            </button>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-[11px]">
+                                <div>
+                                    <span class="text-slate-500 uppercase font-bold">Ciphertext (Base64):</span>
+                                    <div id="crypto-aes-enc-ct" class="text-indigo-300 font-mono break-all select-all">--</div>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 uppercase font-bold">96-bit Nonce (Base64):</span>
+                                    <div id="crypto-aes-enc-nonce" class="text-cyan-400 font-mono break-all select-all">--</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Decryption Box -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-lock-open text-amber-400"></i> Authenticated AES-256-GCM Decryption
+                            </h3>
+                            <span class="text-[10px] font-mono text-emerald-400">Integrity Verified</span>
+                        </div>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Passphrase</label>
+                                <input type="password" id="crypto-aes-dec-pass" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono" placeholder="Matching passphrase...">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block font-medium text-slate-300 mb-1">Nonce (Base64)</label>
+                                    <input type="text" id="crypto-aes-dec-nonce" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono text-xs" placeholder="Paste 96-bit nonce...">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-slate-300 mb-1">Ciphertext (Base64)</label>
+                                    <input type="text" id="crypto-aes-dec-ct" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono text-xs" placeholder="Paste ciphertext...">
+                                </div>
+                            </div>
+                            <button onclick="executeAESDecrypt()" class="w-full py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-unlock"></i> Decrypt & Verify Integrity
+                            </button>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Decrypted Plaintext:</span>
+                                <div id="crypto-aes-dec-output" class="text-emerald-300 font-mono text-xs break-all select-all">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Digital Signatures (Ed25519 & RSA-PSS) -->
+                <div id="crypto-tab-signatures" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Keypair Display & Generation -->
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-id-card-clip text-emerald-400"></i> Asymmetric Keypair Generator
+                                </h3>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="generateNewKeyPair('Ed25519')" class="px-2.5 py-1 bg-emerald-600/30 text-emerald-300 hover:bg-emerald-600/50 rounded text-xs font-semibold">Ed25519</button>
+                                    <button onclick="generateNewKeyPair('RSA-2048')" class="px-2.5 py-1 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded text-xs font-semibold">RSA-2048</button>
+                                </div>
+                            </div>
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <span class="text-slate-400 uppercase text-[10px] font-bold">Public Key (PEM):</span>
+                                    <textarea id="crypto-pubkey-display" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 font-mono text-[11px] text-emerald-400 select-all" placeholder="Generate keypair to view public key..."></textarea>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 uppercase text-[10px] font-bold">Private Key (PKCS#8 PEM):</span>
+                                    <textarea id="crypto-privkey-display" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 font-mono text-[11px] text-rose-400 select-all" placeholder="Generate keypair to view private key..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sign & Verify Box -->
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-signature text-purple-400"></i> Sign Document & Verify Attestation
+                                </h3>
+                                <span class="text-[10px] font-mono text-purple-400">RFC 8032</span>
+                            </div>
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block font-medium text-slate-300 mb-1">Message / Document to Sign</label>
+                                    <input type="text" id="crypto-sign-msg" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-200" placeholder="e.g. Asperion Board Resolution ADT/RES/2026/001 approved">
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="executeSignMessage()" class="py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-pen-nib"></i> Sign Message
+                                    </button>
+                                    <button onclick="executeVerifySignature()" class="py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold rounded-lg transition flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-check-double"></i> Verify Signature
+                                    </button>
+                                </div>
+                                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-[11px]">
+                                    <div>
+                                        <span class="text-slate-500 uppercase font-bold">Base64 Signature:</span>
+                                        <div id="crypto-sig-output" class="text-purple-300 font-mono break-all select-all">--</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500 uppercase font-bold">Verification Verdict:</span>
+                                        <div id="crypto-verify-verdict" class="font-mono font-bold text-slate-400">Awaiting signature input</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: Merkle Tree Root -->
+                <div id="crypto-tab-merkle" class="hidden space-y-6">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-network-wired text-cyan-400"></i> Merkle Tree Audit Root Calculator
+                            </h3>
+                            <span class="text-[10px] font-mono text-cyan-400">SOC 2 Type II Non-Repudiation</span>
+                        </div>
+                        <p class="text-xs text-slate-300">
+                            Enter comma or newline-separated audit strings, transactions, or leaf records. The cryptographic engine iteratively combines pairs with SHA-256 to calculate an immutable Merkle Root.
+                        </p>
+                        <div class="space-y-3 text-xs">
+                            <textarea id="crypto-merkle-input" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono text-xs" placeholder="INVOICE-001&#10;BOARD-RES-001&#10;PAYROLL-MAY-2026&#10;SRE-BACKUP-SNAP-01"></textarea>
+                            <button onclick="executeMerkleTree()" class="w-full py-2 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-tree"></i> Generate Cryptographic Merkle Root
+                            </button>
+                            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-xs">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-slate-500 uppercase font-bold text-[10px]">Merkle Root Hash:</span>
+                                    <span id="crypto-merkle-cert" class="text-cyan-400 font-mono text-[11px]">--</span>
+                                </div>
+                                <div id="crypto-merkle-root" class="text-cyan-300 font-mono text-xs break-all select-all font-bold">--</div>
+                                <div id="crypto-merkle-leaves" class="text-slate-400 font-mono text-[11px] pt-1 border-t border-slate-800/80"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>

@@ -1,0 +1,293 @@
+<section id="view-pmo" class="module-view hidden">
+                <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">PMBOK 7 & ISO 21500 ALIGNED</span>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">STAGE-GATE GOVERNANCE</span>
+                            <span class="text-xs font-mono text-slate-500">PMO Operating Model v1.0</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project text-blue-600"></i> PMO & Global Delivery Operations Center
+                        </h2>
+                        <p class="text-sm text-slate-500">Comprehensive project lifecycle management: Intake business cases, baselined charters, agile sprints, capacity planning, RAID log, and quality UAT sign-offs.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="togglePMOModal('modal-pmo-intake')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus-circle"></i> New Project Intake
+                        </button>
+                        <button onclick="togglePMOModal('modal-pmo-action')" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-list-check"></i> Log SteerCo Action
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stage-Gate Governance Pipeline Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm border-t-4 border-t-slate-400">
+                        <div class="text-[10px] font-bold uppercase text-slate-400">Stage Gate 1</div>
+                        <div class="text-sm font-bold text-slate-800 mt-0.5">Project Intake</div>
+                        <div class="text-xl font-extrabold text-blue-700 mt-1" id="pmo-count-intakes">2</div>
+                        <div class="text-[10px] text-slate-500">Business Case & Strategic Fit</div>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm border-t-4 border-t-blue-500">
+                        <div class="text-[10px] font-bold uppercase text-slate-400">Stage Gate 2</div>
+                        <div class="text-sm font-bold text-slate-800 mt-0.5">Charter Baseline</div>
+                        <div class="text-xl font-extrabold text-indigo-700 mt-1" id="pmo-count-charters">1</div>
+                        <div class="text-[10px] text-indigo-600">Signed-off Scope Baseline</div>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm border-t-4 border-t-indigo-600">
+                        <div class="text-[10px] font-bold uppercase text-slate-400">Stage Gate 3</div>
+                        <div class="text-sm font-bold text-slate-800 mt-0.5">Sprint Execution</div>
+                        <div class="text-xl font-extrabold text-purple-700 mt-1" id="pmo-count-projects">1</div>
+                        <div class="text-[10px] text-purple-600">WBS Tasks & Capacity Plan</div>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm border-t-4 border-t-amber-500">
+                        <div class="text-[10px] font-bold uppercase text-slate-400">Stage Gate 4</div>
+                        <div class="text-sm font-bold text-slate-800 mt-0.5">Quality & UAT</div>
+                        <div class="text-xl font-extrabold text-amber-600 mt-1" id="pmo-count-uats">3</div>
+                        <div class="text-[10px] text-emerald-600">100% Passed Sign-Offs</div>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm border-t-4 border-t-emerald-600">
+                        <div class="text-[10px] font-bold uppercase text-slate-400">Stage Gate 5</div>
+                        <div class="text-sm font-bold text-slate-800 mt-0.5">Closure & Lessons</div>
+                        <div class="text-xl font-extrabold text-emerald-700 mt-1" id="pmo-count-closures">2</div>
+                        <div class="text-[10px] text-emerald-600">Accepted & Billed Out</div>
+                    </div>
+                </div>
+
+                <!-- Interactive Sprint Kanban Task Board -->
+                <div class="mb-6 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-bars-staggered text-blue-600"></i> Sprint Execution Board (Sprint 1 - Core Foundations)
+                        </h3>
+                        <span class="text-xs bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-full border border-purple-200">
+                            Velocity: 38 / 40 Story Points (95% Burn-up)
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-xs uppercase tracking-wider text-slate-600">To Do</span>
+                            </div>
+                            <div id="kanban-todo"></div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-xs uppercase tracking-wider text-blue-800">In Progress</span>
+                            </div>
+                            <div id="kanban-inprogress"></div>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-xs uppercase tracking-wider text-emerald-800">Done / Verified</span>
+                            </div>
+                            <div id="kanban-done"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage-Gate 1 & 2: Project Intake & Baselined Charters -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Project Intake Pipeline -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-inbox text-blue-600"></i> Stage-Gate 1: Project Intake & Business Cases
+                            </h3>
+                            <span class="text-[10px] font-semibold text-slate-400">Pre-Charter Evaluation</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Intake Code</th>
+                                        <th class="p-2.5">Project Name</th>
+                                        <th class="p-2.5">Strategic Fit</th>
+                                        <th class="p-2.5 text-right">Est. Budget</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pmo-intakes" class="divide-y divide-slate-100 font-mono"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Charter Baselines -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-file-contract text-indigo-600"></i> Stage-Gate 2: Baselined Project Charters
+                            </h3>
+                            <span class="text-[10px] font-semibold text-slate-400">Formal Scope Sign-Off</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Charter Ref</th>
+                                        <th class="p-2.5">Problem / Opportunity</th>
+                                        <th class="p-2.5">Success Criteria</th>
+                                        <th class="p-2.5">Signoff Authority</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pmo-charters" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resource Capacity & SteerCo Action/Decision Log -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Capacity Planning -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-people-arrows text-purple-600"></i> Resource Capacity & Skills Allocation Plan
+                            </h3>
+                            <span class="text-[10px] font-semibold text-purple-600">Workload Balancing</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Role</th>
+                                        <th class="p-2.5">Resource Name</th>
+                                        <th class="p-2.5 text-right">Required</th>
+                                        <th class="p-2.5 text-right">Available</th>
+                                        <th class="p-2.5 text-right">Util %</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pmo-capacity" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SteerCo Action Items & Decisions -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-gavel text-amber-600"></i> SteerCo Action & Decision Register
+                            </h3>
+                            <span class="text-[10px] font-semibold text-slate-400">Governance Cadence</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Type</th>
+                                        <th class="p-2.5">Action / Decision Summary</th>
+                                        <th class="p-2.5">Owner</th>
+                                        <th class="p-2.5">Due Date</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pmo-actions" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage-Gate 4 & 5: Quality UAT & Project Closure Lessons -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Quality UAT -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-check text-emerald-600"></i> Stage-Gate 4: Quality & UAT Acceptance Sign-Offs
+                            </h3>
+                            <span class="text-[10px] font-semibold text-emerald-600">100% Quality Pass</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Deliverable</th>
+                                        <th class="p-2.5">Review Type</th>
+                                        <th class="p-2.5">Client Reviewer</th>
+                                        <th class="p-2.5">Signoff Date</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pmo-uat" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Closure & Lessons Learned -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-flag-checkered text-cyan-600"></i> Stage-Gate 5: Project Handover, Billing & Lessons Learned
+                            </h3>
+                            <span class="text-[10px] font-semibold text-slate-400">Formal Closure</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th class="p-2.5">Closure Area</th>
+                                        <th class="p-2.5">Evidence / Deliverable</th>
+                                        <th class="p-2.5">Lessons Learned Summary</th>
+                                        <th class="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-pmo-closures" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Existing Projects Portfolio & RAID Log -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-blue-600"></i> Active Projects Portfolio
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Code</th>
+                                        <th class="p-3">Project Name</th>
+                                        <th class="p-3">Manager</th>
+                                        <th class="p-3">Budget</th>
+                                        <th class="p-3">Timeline</th>
+                                        <th class="p-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-projects"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> RAID Log (Risks, Assumptions, Issues, Dependencies)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">Type</th>
+                                        <th class="p-3">Title</th>
+                                        <th class="p-3">Impact</th>
+                                        <th class="p-3">Mitigation Plan</th>
+                                        <th class="p-3">Owner</th>
+                                        <th class="p-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-raid"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 6b. SDLC & DevSecOps Engineering Cockpit View -->

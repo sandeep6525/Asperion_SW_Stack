@@ -1,0 +1,63 @@
+<section id="view-vault" class="module-view hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <i class="fa-solid fa-folder-tree text-amber-500"></i> Enterprise Knowledge & Document Vault
+                        </h2>
+                        <p class="text-sm text-slate-500">260+ authentic operational handbooks, SOPs, legal templates, founder strategy packs, and 65+ HR letter templates.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="vault-total-badge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full border border-amber-200">260+ Documents Indexed</span>
+                    </div>
+                </div>
+
+                <!-- Category Filters & Search -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
+                        <div class="relative w-full md:w-96">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input id="vault-search-input" oninput="handleVaultSearch()" type="text" placeholder="Search templates, SOPs, policies, letters..." class="w-full pl-9 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="text-slate-500">Filter Format:</span>
+                            <button onclick="filterVaultFormat('')" class="format-filter-btn px-2.5 py-1 rounded bg-slate-800 text-white font-medium" data-fmt="">All</button>
+                            <button onclick="filterVaultFormat('docx')" class="format-filter-btn px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200" data-fmt="docx">DOCX</button>
+                            <button onclick="filterVaultFormat('pdf')" class="format-filter-btn px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200" data-fmt="pdf">PDF</button>
+                            <button onclick="filterVaultFormat('xlsx')" class="format-filter-btn px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200" data-fmt="xlsx">XLSX</button>
+                        </div>
+                    </div>
+
+                    <!-- Category Pills -->
+                    <div id="vault-category-pills" class="flex flex-wrap gap-2 text-xs"></div>
+                </div>
+
+                <!-- Documents Table -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-blue-600"></i> Corporate Documents & Template Repository
+                        </h3>
+                        <span id="vault-showing-count" class="text-xs text-slate-500">Showing all documents</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50 text-slate-600 uppercase text-xs border-b">
+                                <tr>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Document Title / File Name</th>
+                                    <th class="p-3">Format</th>
+                                    <th class="p-3">File Size</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-vault-docs"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 11. Strategy, Functions, KPIs & Executive Thoughts View -->

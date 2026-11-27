@@ -1,0 +1,202 @@
+<section id="view-dashboard" class="module-view">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Executive Management Information System (MIS)</h2>
+                    <p class="text-sm text-slate-500">Consolidated operational health across corporate governance, finance, people, delivery, and security.</p>
+                </div>
+
+                <!-- Top Stat Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="stat-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs font-semibold uppercase text-slate-400 mb-1">Total Revenue Invoiced</div>
+                        <div id="kpi-revenue" class="text-2xl font-bold text-slate-900">₹0</div>
+                        <div class="text-xs text-emerald-600 mt-2 font-medium"><i class="fa-solid fa-arrow-trend-up"></i> Client Billing Active</div>
+                    </div>
+                    <div class="stat-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs font-semibold uppercase text-slate-400 mb-1">Collections Received</div>
+                        <div id="kpi-collections" class="text-2xl font-bold text-emerald-700">₹0</div>
+                        <div class="text-xs text-slate-500 mt-2">Treasury Bank Inflows</div>
+                    </div>
+                    <div class="stat-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs font-semibold uppercase text-slate-400 mb-1">Accounts Receivable (AR)</div>
+                        <div id="kpi-ar" class="text-2xl font-bold text-amber-600">₹0</div>
+                        <div class="text-xs text-slate-500 mt-2">Due under Net 30 Terms</div>
+                    </div>
+                    <div class="stat-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-xs font-semibold uppercase text-slate-400 mb-1">Monthly Cloud Spend</div>
+                        <div id="kpi-cloud" class="text-2xl font-bold text-blue-700">₹0</div>
+                        <div class="text-xs text-emerald-600 mt-2 font-medium">Within ₹50,000 Budget</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div class="stat-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Active Employees</div>
+                            <div id="kpi-headcount" class="text-xl font-bold text-slate-800">0</div>
+                        </div>
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-user-group"></i></div>
+                    </div>
+                    <div class="stat-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Active Projects</div>
+                            <div id="kpi-projects" class="text-xl font-bold text-slate-800">0</div>
+                        </div>
+                        <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-folder-open"></i></div>
+                    </div>
+                    <div class="stat-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Upcoming Filings</div>
+                            <div id="kpi-compliance" class="text-xl font-bold text-amber-600">0</div>
+                        </div>
+                        <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-check"></i></div>
+                    </div>
+                    <div class="stat-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Security Incidents</div>
+                            <div id="kpi-incidents" class="text-xl font-bold text-rose-600">0</div>
+                        </div>
+                        <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-lg"><i class="fa-solid fa-shield-virus"></i></div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Calculated Executive Ratios & Key Indicators -->
+                <div class="bg-gradient-to-r from-slate-900 to-blue-950 text-white rounded-xl p-5 mb-8 shadow-md border border-slate-800">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+                            <i class="fa-solid fa-microchip"></i> Dynamic Operational Ratios & Real-Time Calculated Metrics
+                        </div>
+                        <span class="text-xs text-slate-400 font-mono">Live Computed via /api/v1/analytics/overview</span>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+                        <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+                            <div class="text-xs text-slate-400 font-medium">Net Operating Margin</div>
+                            <div id="ratio-operating-margin" class="text-xl font-bold text-emerald-400 mt-1">--%</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">(Collections - Burn) / Inflows</div>
+                        </div>
+                        <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+                            <div class="text-xs text-slate-400 font-medium">Treasury Cash Runway</div>
+                            <div id="ratio-cash-runway" class="text-xl font-bold text-cyan-400 mt-1">-- Months</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Closing Cash / Monthly Burn</div>
+                        </div>
+                        <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+                            <div class="text-xs text-slate-400 font-medium">DSO (Sales Outstanding)</div>
+                            <div id="ratio-dso" class="text-xl font-bold text-amber-400 mt-1">-- Days</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Collection Velocity Metric</div>
+                        </div>
+                        <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+                            <div class="text-xs text-slate-400 font-medium">Statutory Compliance Index</div>
+                            <div id="ratio-compliance-index" class="text-xl font-bold text-emerald-400 mt-1">--%</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">MCA / GST / TDS / PT On-Track</div>
+                        </div>
+                        <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50 col-span-2 md:col-span-1">
+                            <div class="text-xs text-slate-400 font-medium">CERT-In Statutory SLA</div>
+                            <div id="ratio-certin-sla" class="text-xl font-bold text-purple-400 mt-1">100.0%</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">6-Hour Regulatory Compliance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Interactive Visual Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-area text-blue-600"></i> 13-Week Cash Flow & Runway Trajectory
+                                </h3>
+                                <p class="text-xs text-slate-500">Scheduled Customer Collections vs Operational Disbursements vs Closing Balance</p>
+                            </div>
+                            <button onclick="switchModule('analytics')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                                Full Analytics <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="h-64 relative">
+                            <canvas id="chart-exec-cashflow"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-pie text-purple-600"></i> Cost Allocation
+                                </h3>
+                                <p class="text-xs text-slate-500">Expenditure breakdown by category</p>
+                            </div>
+                        </div>
+                        <div class="h-64 relative">
+                            <canvas id="chart-exec-cost"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Balanced Scorecard (BSC) & Strategic Objectives -->
+                <div class="mb-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-5 pb-3 border-b border-slate-100">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">ISO 9001:2015 CLAUSE 9.1</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">OPC STRATEGIC GOVERNANCE</span>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-compass text-indigo-600"></i> Executive Balanced Scorecard (BSC) & Strategic Performance
+                            </h3>
+                            <p class="text-xs text-slate-500">Cross-pillar alignment across Capital Liquidity, Commercial Contracts, Operational Quality, and Human Capital.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono text-slate-400">Sole Director Oversight: <strong class="text-slate-700">Varadi Vijay</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="exec-bsc-cards">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Statutory Filings Countdown Calendar & Regulatory Radar -->
+                <div class="mb-8 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 p-6 rounded-2xl border border-slate-800 text-white shadow-xl">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-5 pb-3 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">MCA & STATUTORY COMPLIANCE</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">ZERO PENALTY POSTURE</span>
+                            </div>
+                            <h3 class="font-bold text-white text-base flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-check text-amber-400"></i> Statutory Filings Countdown Calendar & Regulatory Radar
+                            </h3>
+                            <p class="text-xs text-slate-400">Live statutory remittance deadlines, regulatory authorities, and zero-default compliance countdowns for CIN <span class="font-mono text-amber-300">U85500KA2026OPC222069</span>.</p>
+                        </div>
+                        <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5 bg-emerald-950/60 px-3 py-1.5 rounded-lg border border-emerald-500/30">
+                            <i class="fa-solid fa-circle-check"></i> 100% Filings On-Track
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5" id="exec-statutory-radar-cards">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Quick Action Banners -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-base text-slate-900 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-blue-600"></i> Statutory Payroll & CTC Engine
+                        </h3>
+                        <p class="text-sm text-slate-600 mb-4">Calculate compensation structures complying with Indian EPFO (12% ceiling), ESIC (0.75%/3.25%), Karnataka PT, and Gratuity (15/26).</p>
+                        <button onclick="switchModule('hrms')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">Open CTC Calculator</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-base text-slate-900 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-file-signature text-purple-600"></i> 70+ Automated HR & Legal Letter Generator
+                        </h3>
+                        <p class="text-sm text-slate-600 mb-4">Instantly draft and export appointment letters, promotion memos, NDAs, PIPs, and relieving certificates on official Asperion letterhead.</p>
+                        <button onclick="switchModule('hrms')" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition">Launch Letter Generator</button>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+            <!-- 2. Governance View -->
+            

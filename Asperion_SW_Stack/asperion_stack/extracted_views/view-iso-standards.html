@@ -1,0 +1,244 @@
+<div id="view-iso-standards" class="module-view hidden space-y-6">
+                <!-- Top Header Banner -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-certificate text-amber-600"></i>
+                                ISO Standards, QMS & Formal Grievance Redressal Cockpit
+                            </h2>
+                            <span class="bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                                Certified & Audited (5 Standards)
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Governance, detailed clause worksheets, internal audits, CAPA resolution, and formal stakeholder grievance redressal across <strong>ISO 9001:2015 (QMS)</strong>, <strong>ISO/IEC 27001 (ISMS)</strong>, <strong>ISO/IEC 42001 (AIMS)</strong>, <strong>ISO/IEC 20000-1 (ITSM)</strong>, and <strong>ISO 22301 (BCMS)</strong>.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="handleOpenGrievanceModal()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-comment-dots"></i> Lodge Formal Grievance
+                        </button>
+                        <button onclick="loadISOStandardsModule()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrows-rotate"></i> Refresh QMS
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Telemetry KPI Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Overall QMS Conformity</div>
+                            <div id="iso-kpi-score" class="text-2xl font-black text-emerald-600 mt-1">--%</div>
+                            <div class="text-[10px] text-slate-500 mt-0.5">Average Clause Conformity Index</div>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 text-xl border border-emerald-100">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Certified ISO Standards</div>
+                            <div id="iso-kpi-standards" class="text-2xl font-black text-amber-600 mt-1">5 Acquired</div>
+                            <div class="text-[10px] text-slate-500 mt-0.5">QMS, ISMS, AIMS, ITSM, BCMS</div>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 text-xl border border-amber-100">
+                            <i class="fa-solid fa-stamp"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Audit Conformity & OFIs</div>
+                            <div id="iso-kpi-audits" class="text-2xl font-black text-blue-600 mt-1">0 NCs</div>
+                            <div id="iso-kpi-audits-sub" class="text-[10px] text-slate-500 mt-0.5">-- Internal & Surveillance Audits</div>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-xl border border-blue-100">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Grievances & CSAT</div>
+                            <div id="iso-kpi-grievances" class="text-2xl font-black text-teal-600 mt-1">100% Resolved</div>
+                            <div id="iso-kpi-csat" class="text-[10px] text-slate-500 mt-0.5">Average CSAT: 5.0 / 5.0</div>
+                        </div>
+                        <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 text-xl border border-teal-100">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs inside ISO Standards -->
+                <div class="flex border-b border-slate-200 gap-6 text-sm font-semibold">
+                    <button id="tab-iso-certs" onclick="switchISOTab('certs')" class="py-2 border-b-2 border-amber-600 text-amber-700 flex items-center gap-2">
+                        <i class="fa-solid fa-certificate"></i> Acquired ISO Certifications (5)
+                    </button>
+                    <button id="tab-iso-controls" onclick="switchISOTab('controls')" class="py-2 text-slate-500 hover:text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-table-list"></i> Clause Controls & Detailed Worksheets
+                    </button>
+                    <button id="tab-iso-audits" onclick="switchISOTab('audits')" class="py-2 text-slate-500 hover:text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i> Audit Inspections & Reports
+                    </button>
+                    <button id="tab-iso-capas" onclick="switchISOTab('capas')" class="py-2 text-slate-500 hover:text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-wrench"></i> CAPA Worksheets (5 Whys)
+                    </button>
+                    <button id="tab-iso-grievances" onclick="switchISOTab('grievances')" class="py-2 text-slate-500 hover:text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-comments"></i> Formal Grievances Register
+                    </button>
+                </div>
+
+                <!-- TAB 1: ACQUIRED ISO CERTIFICATIONS -->
+                <div id="iso-panel-certs" class="space-y-4">
+                    <div id="iso-certifications-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- TAB 2: DETAILED CLAUSE CONTROLS & WORKSHEETS -->
+                <div id="iso-panel-controls" class="hidden space-y-4">
+                    <div class="flex items-center justify-between pb-2 border-b">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                            <i class="fa-solid fa-filter text-amber-600"></i> Filter Standard:
+                            <select id="iso-filter-standard-select" onchange="filterISOClauseControls(this.value)" class="text-xs border rounded-lg p-1.5 bg-slate-50 font-medium">
+                                <option value="">All Acquired Standards</option>
+                                <option value="ISO-9001:2015">ISO 9001:2015 (QMS)</option>
+                                <option value="ISO/IEC-27001:2022">ISO/IEC 27001:2022 (ISMS)</option>
+                                <option value="ISO/IEC-42001:2023">ISO/IEC 42001:2023 (AIMS)</option>
+                                <option value="ISO/IEC-20000-1:2018">ISO/IEC 20000-1:2018 (ITSM)</option>
+                                <option value="ISO-22301:2019">ISO 22301:2019 (BCMS)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-600 border-b">
+                                        <th class="p-3 font-semibold">Control Code</th>
+                                        <th class="p-3 font-semibold">Clause & Title</th>
+                                        <th class="p-3 font-semibold">Domain</th>
+                                        <th class="p-3 font-semibold">Requirement Summary</th>
+                                        <th class="p-3 font-semibold">Implementation Mechanism</th>
+                                        <th class="p-3 font-semibold">Evidence Reference</th>
+                                        <th class="p-3 font-semibold">Maturity / Score</th>
+                                        <th class="p-3 font-semibold">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="iso-controls-table-body" class="divide-y divide-slate-100">
+                                    <tr><td colspan="8" class="p-4 text-center text-slate-400">Loading clause worksheets...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: AUDIT INSPECTIONS -->
+                <div id="iso-panel-audits" class="hidden space-y-4">
+                    <div id="iso-audits-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- TAB 4: CAPA DETAILED WORKSHEETS -->
+                <div id="iso-panel-capas" class="hidden space-y-4">
+                    <div id="iso-capas-container" class="space-y-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- TAB 5: FORMAL GRIEVANCE REDRESSAL -->
+                <div id="iso-panel-grievances" class="hidden space-y-4">
+                    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                        <div class="p-3 bg-slate-50 border-b flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-700 uppercase">Formal Multi-Stakeholder Grievance Redressal Register</span>
+                            <span class="text-slate-500">Statutory 7-Day Resolution Mandate</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-600 border-b">
+                                        <th class="p-3 font-semibold">Grievance ID</th>
+                                        <th class="p-3 font-semibold">Stakeholder & Type</th>
+                                        <th class="p-3 font-semibold">Category / Severity</th>
+                                        <th class="p-3 font-semibold">Subject & Description</th>
+                                        <th class="p-3 font-semibold">Investigation & Resolution Details</th>
+                                        <th class="p-3 font-semibold">SLA / CSAT</th>
+                                        <th class="p-3 font-semibold">Status</th>
+                                        <th class="p-3 font-semibold">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="iso-grievances-table-body" class="divide-y divide-slate-100">
+                                    <tr><td colspan="8" class="p-4 text-center text-slate-400">Loading grievances register...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL: LODGE FORMAL GRIEVANCE -->
+            <div id="modal-lodge-grievance" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-comment-dots text-amber-600 text-lg"></i>
+                            <h3 class="font-bold text-slate-800 text-base">Lodge Formal Stakeholder Grievance</h3>
+                        </div>
+                        <button onclick="closeGrievanceModal()" class="text-slate-400 hover:text-slate-600 text-sm">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <form onsubmit="handleLodgeGrievanceSubmit(event)" class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Stakeholder Type</label>
+                                <select id="grv-stakeholder-type" class="w-full text-xs border rounded-lg p-2.5 bg-slate-50 font-medium">
+                                    <option value="Client">Retainer Client</option>
+                                    <option value="Employee">Corporate Employee</option>
+                                    <option value="Vendor">Procurement Vendor</option>
+                                    <option value="Partner">Strategic Partner</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Category</label>
+                                <select id="grv-category" class="w-full text-xs border rounded-lg p-2.5 bg-slate-50 font-medium">
+                                    <option value="Quality of Deliverable">Quality of Deliverable</option>
+                                    <option value="SLA Delay">Service SLA Delay</option>
+                                    <option value="Billing Discrepancy">Billing & Tax Discrepancy</option>
+                                    <option value="Workplace Conduct & Mobility">Workplace Conduct & Mobility</option>
+                                    <option value="Data Privacy & Security">Data Privacy & Security</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Complainant Full Name</label>
+                                <input id="grv-name" type="text" required value="Client Sponsor / Employee" class="w-full text-xs border rounded-lg p-2.5">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Official Email Address</label>
+                                <input id="grv-email" type="email" required value="complainant@domain.com" class="w-full text-xs border rounded-lg p-2.5">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Subject</label>
+                            <input id="grv-subject" type="text" required value="Formal Inquiry Regarding Deliverable Specification" class="w-full text-xs border rounded-lg p-2.5">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Comprehensive Description of Issue</label>
+                            <textarea id="grv-desc" rows="3" required class="w-full text-xs border rounded-lg p-2.5">Detailed background and specific remedy requested...</textarea>
+                        </div>
+                        <div class="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onclick="closeGrievanceModal()" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg transition shadow">
+                                <i class="fa-solid fa-paper-plane mr-1"></i> Register Formal Grievance
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- 14. AGENTIC AI & AUTONOMOUS MULTI-AGENT SWARM SUITE -->
+            <!-- ============================================================== -->
