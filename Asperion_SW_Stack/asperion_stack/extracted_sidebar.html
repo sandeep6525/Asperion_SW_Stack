@@ -1,0 +1,106 @@
+<aside id="main-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out">
+            <div class="px-4 pt-4 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                <span>Operating Modules</span>
+                <button onclick="document.getElementById('main-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden');" class="lg:hidden text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <nav class="flex-1 px-3 pb-4 space-y-1.5">
+                <button data-target="dashboard" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-blue-800 text-white">
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i> Executive MIS
+                </button>
+                <button data-target="governance" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-scale-balanced w-5 text-center"></i> Governance & OPC
+                </button>
+                <button data-target="crm" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-handshake w-5 text-center"></i> CRM & Contracting
+                </button>
+                <button data-target="finance" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i> Finance, Tax & AP/AR
+                </button>
+                <button data-target="hrms" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-users-gear w-5 text-center"></i> HRMS & CTC Engine
+                </button>
+                <button data-target="pmo" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-diagram-project w-5 text-center"></i> PMO & Delivery
+                </button>
+                <button data-target="sdlc" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-code-branch w-5 text-center text-cyan-400"></i> SDLC & DevSecOps
+                </button>
+                <button data-target="procurement" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-truck-ramp-box w-5 text-center"></i> Vendor Procurement
+                </button>
+                <button data-target="guardrails" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-shield-virus w-5 text-center text-teal-400"></i> Guardrails & Architectures
+                </button>
+                <button data-target="iso-standards" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-certificate w-5 text-center text-amber-400"></i> ISO Standards & QMS
+                </button>
+                <button data-target="ai-cloud" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-microchip w-5 text-center text-violet-400"></i> AI APIs, MCPs & Multi-Cloud
+                </button>
+                <button data-target="agentic-ai" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-robot w-5 text-center text-purple-400"></i> Agentic AI & Swarm
+                    <span id="agentic-ai-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/30 text-purple-300 border border-purple-500/40 font-mono">SWARM</span>
+                </button>
+                <button data-target="operations" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-cube w-5 text-center text-cyan-400"></i> Operations & BCP/DR Ledger
+                    <span id="operations-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono">SHA256</span>
+                </button>
+                <button data-target="crypto-tools" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-key w-5 text-center text-emerald-400"></i> Cryptography & PKI Tools
+                    <span id="crypto-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-mono">FIPS</span>
+                </button>
+                <button data-target="infrastructure" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-server w-5 text-center"></i> IT, Cloud & Passkeys
+                </button>
+                <button data-target="secops" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-shield-halved w-5 text-center"></i> SecOps & CERT-In War Room
+                </button>
+                <button data-target="vault" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-folder-tree w-5 text-center text-amber-400"></i> Master Document Vault
+                </button>
+                <button data-target="strategy" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-chess w-5 text-center text-cyan-400"></i> Strategy, KPIs & Decisions
+                </button>
+                <button data-target="analytics" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-chart-line w-5 text-center text-emerald-400"></i> Visual Intelligence Hub
+                </button>
+                <button data-target="internal-support" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-headset w-5 text-center text-purple-400"></i> Internal Service Desk & Alerts
+                </button>
+                <button data-target="itsm" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-network-wired w-5 text-center text-cyan-400"></i> ITSM & CMDB Operations
+                    <span id="itsm-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono">ITIL v4</span>
+                </button>
+                <button data-target="teams" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-comments w-5 text-center text-indigo-400"></i> Asperion Teams & Chat
+                    <span id="teams-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 font-mono">LIVE</span>
+                </button>
+                <button data-target="sharepoint" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-shapes w-5 text-center text-teal-400"></i> Asperion SharePoint & SOPs
+                    <span id="sharepoint-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/30 text-teal-300 border border-teal-500/40 font-mono">HUB</span>
+                </button>
+                <button data-target="training" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800 relative">
+                    <i class="fa-solid fa-graduation-cap w-5 text-center text-amber-400"></i> Training & Joinee Academy
+                    <span id="training-sidebar-badge" class="ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/30 text-amber-300 border border-amber-500/40 font-mono">LMS</span>
+                </button>
+                <div class="pt-2 pb-1 border-t border-slate-800 text-[10px] font-bold text-slate-500 uppercase px-3">Dedicated Portals</div>
+                <button data-target="portal-employee" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-user-tie w-5 text-center text-blue-400"></i> Employee Portal (ESS)
+                </button>
+                <button data-target="portal-client" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-handshake-angle w-5 text-center text-emerald-400"></i> Client SLA Portal
+                </button>
+                <button data-target="portal-vendor" class="nav-btn w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-truck-moving w-5 text-center text-amber-400"></i> Vendor Sourcing Portal
+                </button>
+            </nav>
+            <div class="p-3.5 border-t border-slate-800 text-xs text-slate-400 flex items-center gap-3 bg-slate-950/60">
+                <img src="/static/img/logo.png" alt="Asperion" class="w-8 h-8 rounded-full border border-cyan-500/30 object-contain bg-slate-900 p-0.5 shrink-0">
+                <div class="min-w-0">
+                    <div class="text-slate-200 font-semibold truncate">Director Varadi Vijay</div>
+                    <div class="text-[10px] text-cyan-400 font-mono">Sole Member &bull; OPC</div>
+                </div>
+            </div>
+        </aside>

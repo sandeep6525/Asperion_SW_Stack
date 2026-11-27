@@ -1,0 +1,1628 @@
+// @ts-ignore
+import { loadVendorPortal, switchVendorPortalTab } from '../utils/dataLoaders.js';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+export const VendorPortalView: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>('pos');
+  useEffect(() => {
+    try {
+      loadVendorPortal();
+    } catch (e) {
+      console.error('Error in loadVendorPortal:', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      switchVendorPortalTab(activeTab);
+    } catch (e) {
+      console.error('Error in switchVendorPortalTab:', e);
+    }
+  }, [activeTab]);
+
+  return (
+    <div className="w-full">
+      <section id="view-portal-vendor" className="module-view ">
+                {/* Portal Header */}
+                <div className="mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 p-6 rounded-2xl text-white shadow-xl border border-amber-900/40">
+                    <div>
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase tracking-wider">
+                                <i className="fa-solid fa-handshake mr-1"></i> Authorized Vendor Portal
+                            </span>
+                            <span id="vp-badge-msme" className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase">
+                                <i className="fa-solid fa-certificate mr-1"></i> MSME Priority
+                            </span>
+                            <span id="vp-badge-rating" className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                                <i className="fa-solid fa-star mr-1"></i> 94.2 / 100 Rating
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-3.5">
+                            <img src="/static/img/logo.png" alt="Asperion" className="w-12 h-12 rounded-full border border-amber-400/40 shadow-lg object-contain bg-slate-950 p-0.5 shrink-0" />
+                            <div>
+                                <h2 className="text-2xl font-black text-white">Vendor Sourcing, POs & Inward GRN Portal</h2>
+                                <p className="text-xs text-slate-300 mt-0.5 max-w-2xl leading-relaxed">
+                                    Official supplier interface for purchase order fulfillment, inward goods receipt notes (GRN), 3-way matching automation, Chapter XVII-B TDS deduction, and MSMED Act 2006 statutory 45-day priority settlement.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Vendor Switcher Dropdown & Quick Actions */}
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
+                        <div className="bg-slate-950/80 p-2 rounded-xl border border-slate-700">
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Active Supplier Profile</label>
+                            <select id="vendor-portal-selector" onChange={() => {}} className="bg-slate-900 text-white font-semibold text-xs border border-slate-700 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <option value="">Loading Vendors...</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-wrap sm:flex-col gap-2">
+                            <button onClick={() => {}} className="px-3.5 py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+                                <i className="fa-solid fa-boxes-packing"></i> Log Inward GRN
+                            </button>
+                            <button onClick={() => {}} className="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-1.5">
+                                <i className="fa-solid fa-file-invoice-dollar"></i> Submit AP Bill
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Executive Vendor Master Profile & Posture Bar */}
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3.5 mb-6">
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="text-[10px] font-bold uppercase text-slate-400">Vendor Code</div>
+                        <div id="vp-msme-badge" className="text-[10px] text-purple-700 font-semibold mt-0.5">Priority Eligible (45d)</div>
+                    </div>
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="text-[10px] font-bold uppercase text-slate-400">Statutory Tax IDs</div>
+                        <div id="vp-gstin" className="text-xs font-mono font-bold text-slate-800 truncate mt-1">--</div>
+                        <div id="vp-pan" className="text-[10px] font-mono text-slate-500 mt-0.5">PAN: --</div>
+                    </div>
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="text-[10px] font-bold uppercase text-slate-400">KYC & DPDP Status</div>
+                        <div id="vp-kyc" className="text-xs font-bold text-emerald-700 mt-1">Approved & Verified</div>
+                        <div className="text-[10px] text-slate-500 mt-0.5">DPA & NDA Signed</div>
+                    </div>
+                    </div>
+
+                {/* Navigation Tabs */}
+                <div className="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-3">
+                    <button onClick={() => setActiveTab('pos')} className="vendor-portal-tab-btn active px-4 py-2 text-xs font-bold rounded-lg bg-amber-700 text-white shadow-sm flex items-center gap-2">
+                        <i className="fa-solid fa-cart-shopping"></i> Purchase Orders (PO)
+                    </button>
+                    <button onClick={() => setActiveTab('grns')} className="vendor-portal-tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+                        <i className="fa-solid fa-boxes-packing text-teal-600"></i> Inward GRN & Inspection
+                    </button>
+                    <button onClick={() => setActiveTab('bills')} className="vendor-portal-tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+                        <i className="fa-solid fa-file-invoice-dollar text-emerald-600"></i> 3-Way Match & AP Bills
+                    </button>
+                    <button onClick={() => setActiveTab('rfx')} className="vendor-portal-tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+                        <i className="fa-solid fa-bullhorn text-indigo-600"></i> e-RFX Sourcing & Bids
+                    </button>
+                    <button onClick={() => setActiveTab('contracts')} className="vendor-portal-tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+                        <i className="fa-solid fa-file-contract text-blue-600"></i> Contracts & CLM Vault
+                    </button>
+                    <button onClick={() => setActiveTab('scorecards')} className="vendor-portal-tab-btn px-4 py-2 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+                        <i className="fa-solid fa-chart-pie text-purple-600"></i> Scorecard & QBR
+                    </button>
+                </div>
+
+                {/* Tab 1: Purchase Orders (PO) */}
+                <div id="vendor-tab-content-pos" style={{ display: activeTab === 'pos' ? 'block' : 'none' }} className="vendor-tab-panel">
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i className="fa-solid fa-cart-shopping text-blue-600"></i> Authorized Purchase Orders Issued to Supplier
+                            </h3>
+                            <span className="text-xs text-slate-500">Subject to standard Bangalore jurisdiction & 100% Inward QA verification</span>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                    <tr>
+                                        <th className="p-3">PO Number</th>
+                                        <th className="p-3">PO Date & Due Date</th>
+                                        <th className="p-3">Item Summary & Specifications</th>
+                                        <th className="p-3 text-right">Order Value (INR)</th>
+                                        <th className="p-3">Terms & Challan</th>
+                                        <th className="p-3">Fulfillment Status</th>
+                                        <th className="p-3 text-right">Official Document</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vp-pos" className="divide-y divide-slate-100 font-mono">
+                                    <tr><td colSpan={7} className="p-4 text-center text-slate-400 font-sans">Loading Purchase Orders...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tab 2: Inward Goods Received Notes (GRN) & QA Inspection */}
+                <div id="vendor-tab-content-grns" style={{ display: activeTab === 'grns' ? 'block' : 'none' }} className="vendor-tab-panel ">
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i className="fa-solid fa-boxes-packing text-teal-600"></i> Inward Goods Received Notes (GRN) & QA Inspection Log
+                                </h3>
+                                <p className="text-[11px] text-slate-500 mt-0.5">Physical intake verification under ISO 9001:2015 Clause 8.4 & tamper seal inspection.</p>
+                            </div>
+                            <button onClick={() => {}} className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-lg transition flex items-center gap-1 shadow-sm">
+                                <i className="fa-solid fa-plus"></i> Log Inward GRN
+                            </button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                    <tr>
+                                        <th className="p-3">GRN #</th>
+                                        <th className="p-3">Linked PO & Challan</th>
+                                        <th className="p-3">Received Date</th>
+                                        <th className="p-3">Item Description</th>
+                                        <th className="p-3 text-center">Ordered</th>
+                                        <th className="p-3 text-center">Accepted</th>
+                                        <th className="p-3 text-center text-rose-600">Rejected</th>
+                                        <th className="p-3">Inspection Posture</th>
+                                        <th className="p-3">Inspector & Hub</th>
+                                        <th className="p-3 text-right">Certificate</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vp-grns" className="divide-y divide-slate-100 font-mono">
+                                    <tr><td colSpan={10} className="p-4 text-center text-slate-400 font-sans">Loading Inward GRNs...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tab 3: 3-Way Match & AP Bills Ledger */}
+                <div id="vendor-tab-content-bills" style={{ display: activeTab === 'bills' ? 'block' : 'none' }} className="vendor-tab-panel ">
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i className="fa-solid fa-file-invoice-dollar text-emerald-600"></i> AP Vendor Bills, 3-Way Match & Chapter XVII-B TDS Ledger
+                                </h3>
+                                <p className="text-[11px] text-slate-500 mt-0.5">Reconciliation of PO vs Delivery Challan vs Inward GRN vs Tax Invoice before disbursement.</p>
+                            </div>
+                            <button onClick={() => {}} className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg transition flex items-center gap-1 shadow-sm">
+                                <i className="fa-solid fa-paper-plane"></i> Submit AP Bill
+                            </button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                    <tr>
+                                        <th className="p-3">Bill Number</th>
+                                        <th className="p-3">Bill Date & Due Date</th>
+                                        <th className="p-3">Linked PO & GRN</th>
+                                        <th className="p-3 text-right">Taxable</th>
+                                        <th className="p-3 text-right text-rose-600">TDS (194C/J)</th>
+                                        <th className="p-3 text-right font-bold text-slate-900">Net Payable</th>
+                                        <th className="p-3">3-Way Match</th>
+                                        <th className="p-3">Payment Status</th>
+                                        <th className="p-3">MSME Statutory Due</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vp-bills" className="divide-y divide-slate-100 font-mono">
+                                    <tr><td colSpan={9} className="p-4 text-center text-slate-400 font-sans">Loading AP Bills...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tab 4: e-RFX Sourcing & Bids */}
+                <div id="vendor-tab-content-rfx" style={{ display: activeTab === 'rfx' ? 'block' : 'none' }} className="vendor-tab-panel ">
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i className="fa-solid fa-bullhorn text-indigo-600"></i> Open Strategic Sourcing Events (RFP / RFQ / BAFO)
+                                </h3>
+                                <p className="text-[11px] text-slate-500 mt-0.5">Competitive transparent bidding governed by ISO 20400 Sustainable Procurement standards.</p>
+                            </div>
+                            <button onClick={() => {}} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg transition flex items-center gap-1 shadow-sm">
+                                <i className="fa-solid fa-gavel"></i> Submit Proposal / Bid
+                            </button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                    <tr>
+                                        <th className="p-3">Event Code</th>
+                                        <th className="p-3">Event Title & Scope</th>
+                                        <th className="p-3">Type & Category</th>
+                                        <th className="p-3 text-right">Budget Allocation</th>
+                                        <th className="p-3">Closing Date</th>
+                                        <th className="p-3">Status</th>
+                                        <th className="p-3">My Bid Status</th>
+                                        <th className="p-3 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vp-rfx" className="divide-y divide-slate-100 font-mono">
+                                    <tr><td colSpan={8} className="p-4 text-center text-slate-400 font-sans">Loading Sourcing Events...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tab 5: Contracts (CLM) & Due Diligence Vault */}
+                <div id="vendor-tab-content-contracts" style={{ display: activeTab === 'contracts' ? 'block' : 'none' }} className="vendor-tab-panel ">
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                        <div className="p-4 border-b border-slate-100 bg-slate-50">
+                            <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i className="fa-solid fa-file-contract text-blue-600"></i> Active Master Service Agreements (MSA), SLAs & Due Diligence Vault
+                            </h3>
+                            <p className="text-[11px] text-slate-500 mt-0.5">Legal contracts executed under Bangalore jurisdiction with DPDP Act 2023 Data Processing Addendum.</p>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                    <tr>
+                                        <th className="p-3">Contract Ref</th>
+                                        <th className="p-3">Agreement Type</th>
+                                        <th className="p-3">Effective Date</th>
+                                        <th className="p-3">Expiry Date</th>
+                                        <th className="p-3 text-right">Annual Value (INR)</th>
+                                        <th className="p-3">SLA Commitment</th>
+                                        <th className="p-3">DPDP DPA Posture</th>
+                                        <th className="p-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vp-contracts" className="divide-y divide-slate-100 font-mono">
+                                    <tr><td colSpan={8} className="p-4 text-center text-slate-400 font-sans">Loading Contracts...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tab 6: Performance Scorecard & CAPA */}
+                <div id="vendor-tab-content-scorecards" style={{ display: activeTab === 'scorecards' ? 'block' : 'none' }} className="vendor-tab-panel ">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div className="p-4 border-b border-slate-100 bg-slate-50">
+                                <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i className="fa-solid fa-chart-pie text-purple-600"></i> Quarterly Business Review (QBR) Scorecards
+                                </h3>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs">
+                                    <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                        <tr>
+                                            <th className="p-3">Period</th>
+                                            <th className="p-3 text-center">Quality</th>
+                                            <th className="p-3 text-center">SLA</th>
+                                            <th className="p-3 text-center">Pricing</th>
+                                            <th className="p-3 text-center">Security</th>
+                                            <th className="p-3 text-center font-bold">Overall Rating</th>
+                                            <th className="p-3">Tier</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-vp-scorecards" className="divide-y divide-slate-100 font-mono">
+                                        <tr><td colSpan={7} className="p-4 text-center text-slate-400 font-sans">Loading Scorecards...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div className="p-4 border-b border-slate-100 bg-slate-50">
+                                <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i className="fa-solid fa-wrench text-amber-600"></i> Corrective & Preventive Action Plans (CAPA)
+                                </h3>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs">
+                                    <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+                                        <tr>
+                                            <th className="p-3">CAPA Code</th>
+                                            <th className="p-3">Issue & Root Cause</th>
+                                            <th className="p-3">Corrective Action</th>
+                                            <th className="p-3">Target Closure</th>
+                                            <th className="p-3">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-vp-capas" className="divide-y divide-slate-100 font-mono">
+                                        <tr><td colSpan={5} className="p-4 text-center text-slate-400 font-sans">No active CAPA records.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Dedicated Vendor Portal Modal 1: Log Inward GRN */}
+            <div id="modal-vendor-portal-grn" className="fixed inset-0 bg-slate-900 bg-opacity-60 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-boxes-packing text-teal-600"></i> Record Inward Goods Received Note (GRN)
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Target Vendor</label>
+                                <input id="vp-grn-vendor-name" type="text" readOnly className="w-full px-3 py-2 border rounded-lg text-xs bg-slate-50 font-bold text-slate-700" />
+                                <input id="vp-grn-vendor-id" type="hidden" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Linked Purchase Order (PO)</label>
+                                <select id="vp-grn-po-select" onChange={() => {}} className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold bg-white"></select>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Delivery Challan Number</label>
+                                <input id="vp-grn-dc-num" type="text" required placeholder="e.g. DC-NEX-8895" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Received Date</label>
+                                <input id="vp-grn-date" type="date" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Item Description & Serial Numbers</label>
+                            <input id="vp-grn-desc" type="text" required placeholder="Item name, model, serial / IMEI identifiers..." className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-3 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Qty Ordered</label>
+                                <input id="vp-grn-ord" type="number" step="1" required defaultValue="1" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Qty Received</label>
+                                <input id="vp-grn-recv" type="number" step="1" required defaultValue="1" onInput={() => {}} className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Qty Accepted</label>
+                                <input id="vp-grn-acc" type="number" step="1" required defaultValue="1" onInput={() => {}} className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold text-emerald-700" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Inspection Posture</label>
+                                <select id="vp-grn-status" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Accepted">Accepted — 100% QA Verified</option>
+                                    <option value="Partial Rejection">Partial Rejection (Defect / Mismatch)</option>
+                                    <option value="Rejected">Rejected — Inward Intake Refused</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Warehouse / Gate Location</label>
+                                <input id="vp-grn-loc" type="text" defaultValue="Horamavu Bangalore HQ" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Inspection Notes & Seal Verification</label>
+                            <textarea id="vp-grn-remarks" rows={2} className="w-full px-3 py-2 border rounded-lg text-xs" placeholder="Tamper seals verified, physical testing nominal..."></textarea>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-3 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-lg transition shadow">
+                                <i className="fa-solid fa-circle-check mr-1"></i> Register & Verify Inward GRN
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Dedicated Vendor Portal Modal 2: Submit AP Bill */}
+            <div id="modal-vendor-portal-bill" className="fixed inset-0 bg-slate-900 bg-opacity-60 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-file-invoice-dollar text-amber-600"></i> Submit Vendor Tax Invoice / AP Bill
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Invoice / Bill Number</label>
+                                <input id="vp-bill-num" type="text" required placeholder="e.g. INV-NEX-9988" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Invoice Date</label>
+                                <input id="vp-bill-date" type="date" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Linked PO Reference</label>
+                                <select id="vp-bill-po-select" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-semibold bg-white"></select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Linked Inward GRN Reference</label>
+                                <select id="vp-bill-grn-select" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-semibold bg-white"></select>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Taxable Value (INR)</label>
+                                <input id="vp-bill-taxable" type="number" step="0.01" required placeholder="100000" onInput={() => {}} className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">GST Amount (18% / Actual)</label>
+                                <input id="vp-bill-gst" type="number" step="0.01" required placeholder="18000" onInput={() => {}} className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">TDS Section (Income Tax Act)</label>
+                                <select id="vp-bill-tds-sec" onChange={() => {}} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                                    <option value="194C">Section 194C — Works Contract (1% / 2%)</option>
+                                    <option value="194J">Section 194J — Professional / Technical (2% / 10%)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Expense Category</label>
+                                <select id="vp-bill-category" className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                                    <option value="Hardware & Workstations">Hardware & Workstations</option>
+                                    <option value="Cloud Hosting & Infrastructure">Cloud Hosting & Infrastructure</option>
+                                    <option value="Telecommunication / Leased Line">Telecommunication / Leased Line</option>
+                                    <option value="Professional Services & Audit">Professional Services & Audit</option>
+                                </select>
+                            </div>
+                        </div>
+                        {/* Live Calculation Preview */}
+                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-1 font-mono">
+                            <div className="flex justify-between text-slate-600">
+                                <span>Estimated TDS to Deduct:</span>
+                                <span id="vp-bill-calc-tds" className="font-bold text-rose-600">₹0.00</span>
+                            </div>
+                            <div className="flex justify-between text-slate-900 border-t pt-1 font-bold">
+                                <span>Estimated Net Payable to Vendor:</span>
+                                <span id="vp-bill-calc-net" className="font-bold text-emerald-700">₹0.00</span>
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-3 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg transition shadow">
+                                <i className="fa-solid fa-paper-plane mr-1"></i> Submit Invoice for 3-Way Match
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Dedicated Vendor Portal Modal 3: Submit e-RFX Bid */}
+            <div id="modal-vendor-portal-bid" className="fixed inset-0 bg-slate-900 bg-opacity-60 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-gavel text-indigo-600"></i> Submit Sourcing Proposal & Commercial Quote
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Target Sourcing Event</label>
+                            <select id="vp-bid-event-select" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-semibold"></select>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Commercial Quote (INR Excl Tax)</label>
+                                <input id="vp-bid-quote" type="number" step="1000" required placeholder="500000" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">SLA Uptime Guarantee (%)</label>
+                                <input id="vp-bid-sla" type="number" step="0.01" required defaultValue="99.95" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Technical Capability Self-Rating (0-100)</label>
+                                <input id="vp-bid-tech" type="number" step="1" required defaultValue="92" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Compliance & Security Score (0-100)</label>
+                                <input id="vp-bid-comp" type="number" step="1" required defaultValue="95" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Proposal Highlights & Value Additions</label>
+                            <textarea id="vp-bid-notes" rows={3} className="w-full px-3 py-2 border rounded-lg text-xs" placeholder="Describe deployment timeline, hardware warranties, escalation matrix..."></textarea>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-3 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg transition shadow">
+                                <i className="fa-solid fa-paper-plane mr-1"></i> Submit Official Bid
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Modal: Log Strategic Thought / Decision */}
+            <div id="modal-thought" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-lightbulb text-indigo-600"></i> Record Strategic Thought or Decision
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Entry Type</label>
+                                <select id="thought-type" className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                                    <option value="Founder Thought / Thesis">Founder Thought / Thesis</option>
+                                    <option value="Strategic Decision">Strategic Decision</option>
+                                    <option value="Architecture Review">Architecture Review</option>
+                                    <option value="Market Vision">Market Vision</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Author / Lead</label>
+                                <input id="thought-author" type="text" defaultValue="Varadi Vijay (Sole Member & Founder)" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Title / Initiative Name</label>
+                            <input id="thought-title" type="text" required placeholder="e.g. Next-Gen Autonomous AI Agent Platform Positioning" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Context & Market Background</label>
+                            <textarea id="thought-context" rows={3} required placeholder="Describe the market opportunity, technical requirement, or business challenge..." className="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Strategic Rationale & Decision</label>
+                            <textarea id="thought-rationale" rows={3} required placeholder="Explain the rationale, chosen mechanism, and expected enterprise ROI..." className="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Tags (comma-separated)</label>
+                            <input id="thought-tags" type="text" defaultValue="AI, Architecture, Moat" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition shadow">Save Strategic Entry</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Add Enterprise Deal / Opportunity */}
+            <div id="modal-crm-opp" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-briefcase text-purple-600"></i> Register New Enterprise Opportunity
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Deal Code</label>
+                                <input id="opp-code" type="text" required placeholder="e.g. ADT-OPP-2026-005" className="w-full px-3 py-2 border rounded-lg text-sm font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Client / Company Name</label>
+                                <input id="opp-client" type="text" required placeholder="e.g. Apex Financial Corp" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Deal Title & Project Scope</label>
+                            <input id="opp-title" type="text" required placeholder="e.g. Cloud Banking Modernization & Migration" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Deal Value (INR)</label>
+                                <input id="opp-value" type="number" step="any" required placeholder="1500000" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Initial Stage</label>
+                                <select id="opp-stage" className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                                    <option value="Lead Qualified">Lead Qualified (10%)</option>
+                                    <option value="Discovery">Discovery (25%)</option>
+                                    <option value="Solution Architecture" selected>Solution Architecture (50%)</option>
+                                    <option value="Legal/Deal Desk">Legal/Deal Desk (80%)</option>
+                                    <option value="Closed Won">Closed Won (100%)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Close Target Date</label>
+                                <input id="opp-close-date" type="date" required className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Discount Offered %</label>
+                                <input id="opp-discount" type="number" step="1" defaultValue="0" placeholder="0" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Owner</label>
+                                <input id="opp-owner" type="text" defaultValue="Director / Sales Lead" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-semibold transition shadow">Create Opportunity</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Create Support Ticket */}
+            <div id="modal-crm-ticket" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-headset text-blue-600"></i> Open Enterprise Support Ticket
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Ticket Number</label>
+                                <input id="tkt-number" type="text" required placeholder="e.g. ADT-SRV-2026-003" className="w-full px-3 py-2 border rounded-lg text-sm font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Client Name</label>
+                                <input id="tkt-client" type="text" required placeholder="e.g. Nexus Fintech Solutions" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Contact Email</label>
+                                <input id="tkt-email" type="email" required placeholder="client.contact@nexusfintech.in" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Severity / SLA</label>
+                                <select id="tkt-severity" className="w-full px-3 py-2 border rounded-lg text-sm bg-white font-medium">
+                                    <option value="P1-Critical">P1 - Critical (1 Hour SLA)</option>
+                                    <option value="P2-High">P2 - High (4 Hours SLA)</option>
+                                    <option value="P3-Medium" selected>P3 - Medium (12 Hours SLA)</option>
+                                    <option value="P4-Low">P4 - Low (24 Hours SLA)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Subject</label>
+                            <input id="tkt-subject" type="text" required placeholder="Brief description of the query or incident..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Detailed Description</label>
+                            <textarea id="tkt-desc" rows={3} required placeholder="Include error messages, steps to reproduce, or requested changes..." className="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition shadow">Submit Ticket</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Add Dynamic KPI */}
+            <div id="modal-kpi" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-chart-line text-emerald-600"></i> Add Enterprise KPI Metric
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">KPI Code</label>
+                                <input id="kpi-code" type="text" required placeholder="e.g. KPI-ENG-03" className="w-full px-3 py-2 border rounded-lg text-sm font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+                                <select id="kpi-category" className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                                    <option value="Financial">Financial</option>
+                                    <option value="Delivery">Delivery & PMO</option>
+                                    <option value="People">People & HR</option>
+                                    <option value="Security">Security & SecOps</option>
+                                    <option value="Governance">Governance & OPC</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">KPI Metric Name</label>
+                            <input id="kpi-name" type="text" required placeholder="e.g. Code Review Coverage %" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Target Value</label>
+                                <input id="kpi-target" type="number" step="any" required placeholder="100" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Actual Value</label>
+                                <input id="kpi-actual" type="number" step="any" required placeholder="95" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Unit</label>
+                                <select id="kpi-unit" className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                                    <option value="%">%</option>
+                                    <option value="INR">INR</option>
+                                    <option value="Days">Days</option>
+                                    <option value="Hours">Hours</option>
+                                    <option value="Count">Count</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Period</label>
+                                <input id="kpi-period" type="text" defaultValue="JUN-2026" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Owner</label>
+                                <input id="kpi-owner" type="text" defaultValue="Function Lead" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition shadow">Save KPI</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Create Internal Service Desk Ticket */}
+            <div id="modal-internal-ticket" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-headset text-purple-600"></i> Submit Internal Service Ticket
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Target Department</label>
+                                <select id="new-tkt-dept" required className="w-full px-3 py-2 border rounded-lg text-sm bg-white font-medium">
+                                    <option value="IT_INFRASTRUCTURE">IT & Cloud Infrastructure</option>
+                                    <option value="HR_PEOPLE">HR & People Operations</option>
+                                    <option value="FINANCE_ACCOUNTS">Finance, Tax & Accounts</option>
+                                    <option value="LEGAL_COMPLIANCE">Legal & Compliance</option>
+                                    <option value="SECOPS_CYBER">Cybersecurity & SOC</option>
+                                    <option value="PMO_ENGINEERING">PMO & Engineering Delivery</option>
+                                    <option value="ADMIN_WORKPLACE">Workplace & Administration</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-600 mb-1">Priority (SLA Window)</label>
+                                <select id="new-tkt-priority" required className="w-full px-3 py-2 border rounded-lg text-sm bg-white font-medium">
+                                    <option value="P3-Medium" selected>P3 - Medium (24h SLA)</option>
+                                    <option value="P1-Critical">P1 - Critical (2h SLA)</option>
+                                    <option value="P2-High">P2 - High (8h SLA)</option>
+                                    <option value="P4-Low">P4 - Low (48h SLA)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Category / Request Type</label>
+                            <input id="new-tkt-cat" type="text" required placeholder="e.g. Hardware Provisioning, VPN Access, Payroll Query..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Subject</label>
+                            <input id="new-tkt-subject" type="text" required placeholder="Concise summary of request or problem" className="w-full px-3 py-2 border rounded-lg text-sm font-medium" />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-600 mb-1">Detailed Description & Context</label>
+                            <textarea id="new-tkt-desc" rows={3} required placeholder="Provide full context, affected systems, error traces or details..." className="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-500 mb-1">Requester Name</label>
+                                <input id="new-tkt-req-name" type="text" defaultValue="Varadi Vijay" required className="w-full px-2.5 py-1.5 border rounded text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-500 mb-1">Requester Email</label>
+                                <input id="new-tkt-req-email" type="email" defaultValue="varadivijay@asperion.in" required className="w-full px-2.5 py-1.5 border rounded text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-500 mb-1">Requester Unit</label>
+                                <input id="new-tkt-req-dept" type="text" defaultValue="GOVERNANCE" required className="w-full px-2.5 py-1.5 border rounded text-xs" />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-semibold transition shadow">Submit & Dispatch Ticket</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Ticket Inspection & Threaded Resolution */}
+            <div id="modal-ticket-detail" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-start border-b pb-3 mb-4">
+                        <div>
+                            <div className="flex items-center gap-2 mb-1">
+                                <span id="detail-tkt-num" className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">IT-TKT-2026-001</span>
+                                <span id="detail-tkt-priority" className="text-xs font-bold px-2 py-0.5 rounded bg-red-100 text-red-800">P1-Critical</span>
+                                <span id="detail-tkt-status" className="text-xs font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-800">In Progress</span>
+                            </div>
+                            <h3 id="detail-tkt-subject" className="font-bold text-base text-slate-900">Ticket Subject Title</h3>
+                        </div>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+
+                    <div className="space-y-4">
+                        {/* Description & Metadata */}
+                        <div className="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                            <div className="text-xs text-slate-500 mb-1 font-semibold uppercase">Description</div>
+                            <p id="detail-tkt-desc" className="text-xs text-slate-800 leading-relaxed whitespace-pre-line">-</p>
+                            <div className="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
+                                <div>Requester: <strong id="detail-tkt-requester" className="text-slate-700">-</strong></div>
+                                <div>Department: <strong id="detail-tkt-dept" className="text-slate-700">-</strong></div>
+                                <div>SLA Target: <strong id="detail-tkt-sla" className="text-slate-700">-</strong></div>
+                            </div>
+                        </div>
+
+                        {/* Status & Assignee Controls */}
+                        <div className="grid grid-cols-2 gap-4 bg-purple-50/50 p-3.5 rounded-lg border border-purple-100">
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-700 mb-1">Update Status</label>
+                                <select id="detail-update-status" className="w-full px-3 py-1.5 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Open">Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Pending Approval">Pending Approval</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-700 mb-1">Assigned Specialist</label>
+                                <input id="detail-update-assignee" type="text" placeholder="e.g. Karthik N / Finance Lead" className="w-full px-3 py-1.5 border rounded-lg text-xs bg-white" />
+                            </div>
+                        </div>
+
+                        {/* Resolution Notes & CSAT (Visible when Resolving) */}
+                        <div>
+                            <label className="block text-xs font-semibold text-slate-700 mb-1">Resolution Summary</label>
+                            <textarea id="detail-update-resolution" rows={2} placeholder="Document the root cause and implemented resolution..." className="w-full px-3 py-2 border rounded-lg text-xs"></textarea>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <label className="text-xs font-semibold text-slate-700">Requester Satisfaction (CSAT):</label>
+                            <select id="detail-update-csat" className="px-2.5 py-1 border rounded text-xs bg-white font-medium">
+                                <option value="5">★★★★★ 5 Stars (Exceptional)</option>
+                                <option value="4">★★★★☆ 4 Stars (Good)</option>
+                                <option value="3">★★★☆☆ 3 Stars (Satisfactory)</option>
+                                <option value="2">★★☆☆☆ 2 Stars (Needs Improvement)</option>
+                                <option value="1">★☆☆☆☆ 1 Star (Unacceptable)</option>
+                            </select>
+                            <button type="button" onClick={() => {}} className="ml-auto text-xs px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold transition shadow">
+                                <i className="fa-solid fa-check"></i> Save Ticket Updates
+                            </button>
+                        </div>
+
+                        {/* Threaded Comments / Activity */}
+                        <div className="border-t pt-3">
+                            <h4 className="text-xs font-bold uppercase text-slate-500 mb-2 flex items-center gap-1.5">
+                                <i className="fa-solid fa-comments"></i> Activity & Discussion Thread
+                            </h4>
+                            <div id="detail-comments-container" className="space-y-2 max-h-48 overflow-y-auto mb-3">
+                                {/* Comments rendered by app.js */}
+                            </div>
+                            <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
+                                <input id="detail-new-comment" type="text" required placeholder="Type an update or internal note..." className="flex-1 px-3 py-1.5 border rounded-lg text-xs" />
+                                <label className="flex items-center gap-1 text-[11px] text-slate-500 px-2 cursor-pointer">
+                                    <input id="detail-is-internal" type="checkbox" className="rounded text-purple-600" /> Internal Note
+                                </label>
+                                <button type="submit" className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Modal: WhatsApp Webhook & Attendance Bot Simulator */}
+            <div id="modal-whatsapp-bot" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg">
+                                <i className="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-sm text-slate-900">Asperion PeopleOps WhatsApp Bot</h3>
+                                <div className="text-[10px] text-emerald-600 flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Meta Cloud API Active
+                                </div>
+                            </div>
+                        </div>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Employee Mobile Phone</label>
+                            <input id="wa-phone-input" type="text" defaultValue="+919886012345" required className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            <span className="text-[10px] text-slate-400">Enrolled mobile registered in Employee Directory</span>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Command / Message Text</label>
+                            <div className="grid grid-cols-3 gap-2 mb-2">
+                                <button type="button" onClick={() => {}} className="px-2 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded text-xs font-bold">IN</button>
+                                <button type="button" onClick={() => {}} className="px-2 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded text-xs font-bold">OUT</button>
+                                <button type="button" onClick={() => {}} className="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-bold">STATUS</button>
+                            </div>
+                            <input id="wa-msg-input" type="text" defaultValue="IN" required className="w-full px-3 py-2 border rounded-lg text-xs font-bold uppercase tracking-wider text-slate-800" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs">
+                            <div>
+                                <label className="text-[10px] text-slate-500 font-semibold block">GPS Latitude</label>
+                                <input id="wa-lat-input" type="number" step="any" defaultValue="13.035820" className="w-full px-2 py-1 border rounded text-[11px] font-mono" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-slate-500 font-semibold block">GPS Longitude</label>
+                                <input id="wa-lon-input" type="number" step="any" defaultValue="77.653410" className="w-full px-2 py-1 border rounded text-[11px] font-mono" />
+                            </div>
+                            <div className="col-span-2 text-[10px] text-emerald-600 font-medium">
+                                Coordinates preset to Horamavu HQ (Inside 250m Geofence)
+                            </div>
+                        </div>
+
+                        {/* Bot Reply Display Bubble */}
+                        <div id="wa-reply-container" className="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">
+                            <div className="font-bold text-[10px] text-emerald-700 uppercase mb-1 flex items-center gap-1">
+                                <i className="fa-brands fa-whatsapp text-emerald-600"></i> Bot Automated Reply
+                            </div>
+                            <p id="wa-reply-text" className="text-xs font-medium whitespace-pre-line"></p>
+                        </div>
+
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Close</button>
+                            <button type="submit" className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                                <i className="fa-solid fa-paper-plane"></i> Send Webhook
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Dedicated Stakeholder Secure Login */}
+            <div id="modal-stakeholder-login" className="fixed inset-0 bg-slate-900 bg-opacity-60 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-slate-100">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <div className="flex items-center gap-2.5">
+                            <img src="/static/img/logo.png" alt="Asperion Logo" className="w-10 h-10 rounded-full border border-cyan-500/30 shadow-md object-contain p-0.5 bg-slate-900 shrink-0" />
+                            <div>
+                                <h3 className="font-bold text-sm text-slate-900">Stakeholder Secure Authentication</h3>
+                                <p className="text-[11px] text-slate-500">Official Portal Access &bull; Asperion OS 2.0</p>
+                            </div>
+                        </div>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+
+                    {/* Quick Persona Selector Pills */}
+                    <div className="mb-4">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Select Stakeholder Login Persona</label>
+                        <div className="grid grid-cols-3 gap-2">
+                            <button type="button" onClick={() => {}} className="p-2 border rounded-xl hover:border-blue-500 hover:bg-blue-50/50 text-left transition flex flex-col items-center text-center">
+                                <i className="fa-solid fa-user-tie text-blue-600 text-base mb-1"></i>
+                                <span className="text-xs font-bold text-slate-800">Employee</span>
+                                <span className="text-[9px] text-slate-500">ESS Portal</span>
+                            </button>
+                            <button type="button" onClick={() => {}} className="p-2 border rounded-xl hover:border-emerald-500 hover:bg-emerald-50/50 text-left transition flex flex-col items-center text-center">
+                                <i className="fa-solid fa-handshake-angle text-emerald-600 text-base mb-1"></i>
+                                <span className="text-xs font-bold text-slate-800">Client</span>
+                                <span className="text-[9px] text-slate-500">SLA & Projects</span>
+                            </button>
+                            <button type="button" onClick={() => {}} className="p-2 border rounded-xl hover:border-amber-500 hover:bg-amber-50/50 text-left transition flex flex-col items-center text-center">
+                                <i className="fa-solid fa-truck-moving text-amber-600 text-base mb-1"></i>
+                                <span className="text-xs font-bold text-slate-800">Vendor</span>
+                                <span className="text-[9px] text-slate-500">POs & Bills</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div id="stakeholder-login-error" className="hidden p-2.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-lg font-medium"></div>
+
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">Official Email Address</label>
+                            <input id="stakeholder-login-email" type="email" defaultValue="employee@asperion.in" required className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                        </div>
+
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-700 mb-1">Passkey / Corporate Password</label>
+                            <input id="stakeholder-login-password" type="password" defaultValue="Password123!" required className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                        </div>
+
+                        <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-[10px] text-slate-500 space-y-0.5">
+                            <div><i className="fa-solid fa-circle-check text-emerald-500 mr-1"></i> End-to-end encrypted session token with RBAC isolation</div>
+                            <div><i className="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Direct routing to dedicated stakeholder cockpit</div>
+                        </div>
+
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                                <i className="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Portal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Stage-Gate 1 New Project Intake */}
+            <div id="modal-pmo-intake" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-inbox text-blue-600"></i> Register Stage-Gate 1 Project Intake
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Intake Code</label>
+                                <input id="pmo-intk-code" type="text" required defaultValue="ADT-INTK-2026-003" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Strategic Fit</label>
+                                <select id="pmo-intk-fit" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Critical">Critical Priority</option>
+                                    <option value="High" selected>High Strategic Fit</option>
+                                    <option value="Medium">Medium Fit</option>
+                                    <option value="Low">Low Fit</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Project Name</label>
+                            <input id="pmo-intk-name" type="text" required placeholder="e.g. NextGen Microservices & Cloud Transformation" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Project Sponsor</label>
+                                <input id="pmo-intk-sponsor" type="text" defaultValue="Varadi Vijay (Sole Director)" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Client / Target</label>
+                                <input id="pmo-intk-client" type="text" defaultValue="Zenith Global Corp" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Expected Business Value / ROI</label>
+                            <input id="pmo-intk-value" type="text" defaultValue="Direct contract revenue & recurring ARR expansion" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Estimated Budget (INR)</label>
+                            <input id="pmo-intk-budget" type="number" step="any" defaultValue="1800000" required className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow">Save Intake</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: SteerCo Action / Decision Logger */}
+            <div id="modal-pmo-action" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-gavel text-purple-600"></i> Record SteerCo Action Item or Decision
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Entry Type</label>
+                                <select id="pmo-act-type" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Action" selected>Action Item</option>
+                                    <option value="Decision">Formal SteerCo Decision</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Source Meeting</label>
+                                <input id="pmo-act-meeting" type="text" defaultValue="Weekly SteerCo Meeting" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Action / Decision Summary</label>
+                            <input id="pmo-act-title" type="text" required placeholder="e.g. Approved database indexing migration for multi-tenant scalability" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Assigned Owner</label>
+                                <input id="pmo-act-owner" type="text" defaultValue="Vikram Rathore (PMO Lead)" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Target Due Date</label>
+                                <input id="pmo-act-due" type="date" defaultValue="2026-07-15" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-lg transition shadow">Record Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: SDLC New Requirement (SRS) */}
+            <div id="modal-sdlc-req" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-file-circle-plus text-blue-600"></i> New SRS Specification (ISO 27001 A.8.25)
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Req Code</label>
+                                <input id="sdlc-req-code" type="text" required defaultValue="ADT-REQ-006" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Category</label>
+                                <select id="sdlc-req-cat" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Functional" selected>Functional Requirement</option>
+                                    <option value="Security (DevSecOps)">Security (DevSecOps)</option>
+                                    <option value="Non-Functional (NFR)">Non-Functional (NFR)</option>
+                                    <option value="Performance">Performance Benchmark</option>
+                                    <option value="Compliance">Statutory Compliance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Specification Title</label>
+                            <input id="sdlc-req-title" type="text" required placeholder="e.g. Automated Session Timeout & CSRF Token Injection" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">MoSCoW Priority</label>
+                                <select id="sdlc-req-prio" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Must Have" selected>Must Have</option>
+                                    <option value="Should Have">Should Have</option>
+                                    <option value="Could Have">Could Have</option>
+                                    <option value="Won't Have">Won't Have</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Verification Method</label>
+                                <select id="sdlc-req-verif" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Automated Test" selected>Automated PyTest Test</option>
+                                    <option value="Security Scan">SAST / DAST Scan</option>
+                                    <option value="Code Review">Peer Code Review</option>
+                                    <option value="UAT">Client UAT Sign-Off</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Acceptance Criteria (Given-When-Then)</label>
+                            <textarea id="sdlc-req-criteria" rows={2} required placeholder="Given an active user session, when inactive for 15 minutes, then force re-authentication..." className="w-full px-3 py-2 border rounded-lg text-xs"></textarea>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow">Save Specification</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: SDLC Defect Tracking (IEEE 1044) */}
+            <div id="modal-sdlc-bug" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-bug text-rose-600"></i> Log Defect (IEEE 1044 / ISO 25010)
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Bug ID</label>
+                                <input id="sdlc-bug-id" type="text" required defaultValue="BUG-2026-003" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Severity</label>
+                                <select id="sdlc-bug-sev" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="S3-Medium" selected>S3 - Medium (Standard SLA)</option>
+                                    <option value="S1-Blocker">S1 - Blocker (Critical Path)</option>
+                                    <option value="S2-Critical">S2 - Critical (High Impact)</option>
+                                    <option value="S4-Minor / Cosmetic">S4 - Minor / Cosmetic</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Bug Title & Summary</label>
+                            <input id="sdlc-bug-title" type="text" required placeholder="e.g. Navigation dropdown misalignment on Safari viewport" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Module Affected</label>
+                                <input id="sdlc-bug-mod" type="text" defaultValue="Frontend UI / Navigation" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Target Environment</label>
+                                <select id="sdlc-bug-env" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Staging" selected>Staging / Pre-Prod</option>
+                                    <option value="Local">Local Development</option>
+                                    <option value="Production">Production Cluster</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg transition shadow">Log Defect</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Procurement New Spend Requisition (PR) */}
+            <div id="modal-procure-pr" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-file-invoice-dollar text-blue-600"></i> New Spend Purchase Requisition (PR)
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">PR Number</label>
+                                <input id="procure-pr-num" type="text" required defaultValue="ADT-PR-2026-005" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Department</label>
+                                <select id="procure-pr-dept" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Engineering & Product" selected>Engineering & Product</option>
+                                    <option value="IT & Infrastructure">IT & Infrastructure</option>
+                                    <option value="Cybersecurity & Compliance">Cybersecurity & Compliance</option>
+                                    <option value="Finance & Accounts">Finance & Accounts</option>
+                                    <option value="Administration & Facilities">Administration & Facilities</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Requester Name</label>
+                                <input id="procure-pr-name" type="text" required defaultValue="Arjun Sharma" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Requester Email</label>
+                                <input id="procure-pr-email" type="email" required defaultValue="arjun.sharma@asperion.in" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Sourcing Category</label>
+                                <select id="procure-pr-cat" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Hardware & Workstations" selected>Hardware & Workstations</option>
+                                    <option value="Cloud & Infrastructure Hosting">Cloud & Infrastructure Hosting</option>
+                                    <option value="Enterprise SaaS & Developer Tools">Enterprise SaaS & Developer Tools</option>
+                                    <option value="Professional Legal & Advisory">Professional Legal & Advisory</option>
+                                    <option value="Facility & Biometrics">Facility & Biometrics</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Estimated Amount (INR)</label>
+                                <input id="procure-pr-amt" type="number" step="1000" required defaultValue="180000" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Item Details & Specifications</label>
+                            <input id="procure-pr-items" type="text" required placeholder="e.g. 2x Ultra-wide 4K Monitors and docking hubs" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Urgency Level</label>
+                                <select id="procure-pr-urgency" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Normal" selected>Normal (Standard Approval)</option>
+                                    <option value="Urgent">Urgent (48h Turnaround)</option>
+                                    <option value="Critical">Critical (Immediate Production Need)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Business Justification</label>
+                                <input id="procure-pr-just" type="text" required defaultValue="Required for dual-screen telemetry monitoring." className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow">Submit Requisition</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Procurement Sourcing Event (e-RFX) */}
+            <div id="modal-procure-event" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-bullhorn text-purple-600"></i> New Strategic Sourcing Event (e-RFX)
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Event Code</label>
+                                <input id="procure-ev-code" type="text" required defaultValue="ADT-RFX-2026-004" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Event Type</label>
+                                <select id="procure-ev-type" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="RFP" selected>RFP - Request for Proposal (Weighted)</option>
+                                    <option value="RFQ">RFQ - Request for Quotation (Price Bid)</option>
+                                    <option value="RFI">RFI - Request for Information</option>
+                                    <option value="Reverse Auction">Reverse Auction (Real-Time Bidding)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Sourcing Scope Title</label>
+                            <input id="procure-ev-title" type="text" required placeholder="e.g. Multi-Cloud Disaster Recovery & Object Storage Cold Tier" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Category</label>
+                                <input id="procure-ev-cat" type="text" required defaultValue="Cloud Hosting & Infrastructure" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Closing Date</label>
+                                <input id="procure-ev-close" type="date" required defaultValue="2026-07-31" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Budget Allocation (INR)</label>
+                                <input id="procure-ev-budget" type="number" step="1000" required defaultValue="450000" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Baseline Cost (INR)</label>
+                                <input id="procure-ev-base" type="number" step="1000" required defaultValue="500000" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-lg transition shadow">Publish Sourcing Event</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Onboard Vendor */}
+            <div id="modal-procure-vendor" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-handshake text-emerald-600"></i> Onboard Approved Enterprise Vendor
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Vendor Code</label>
+                                <input id="procure-ven-code" type="text" required defaultValue="ADT-VEN-006" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Criticality Tier</label>
+                                <select id="procure-ven-tier" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Tier 2 - High" selected>Tier 2 - High</option>
+                                    <option value="Tier 1 - Mission Critical">Tier 1 - Mission Critical</option>
+                                    <option value="Tier 3 - Medium">Tier 3 - Medium</option>
+                                    <option value="Tier 4 - Low">Tier 4 - Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Company / Entity Name</label>
+                            <input id="procure-ven-name" type="text" required placeholder="e.g. Cloudflare India Pvt Ltd" className="w-full px-3 py-2 border rounded-lg text-xs font-semibold" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Contact Email</label>
+                                <input id="procure-ven-email" type="email" required placeholder="support@vendor.com" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Category</label>
+                                <input id="procure-ven-cat" type="text" defaultValue="Cloud & CDN Security" required className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">PAN</label>
+                                <input id="procure-ven-pan" type="text" defaultValue="AABCC9988D" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">GSTIN</label>
+                                <input id="procure-ven-gst" type="text" defaultValue="29AABCC9988D1Z5" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">MSME Category</label>
+                                <select id="procure-ven-msme" className="w-full px-3 py-2 border rounded-lg text-xs bg-white font-medium">
+                                    <option value="Micro" selected>Micro (MSMED 45-day Rule)</option>
+                                    <option value="Small">Small (MSMED 45-day Rule)</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Non-MSME">Non-MSME</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Annual Spend Est (INR)</label>
+                                <input id="procure-ven-spend" type="number" step="1000" defaultValue="200000" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition shadow">Onboard Vendor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {/* Modal: Log Inward GRN */}
+            <div id="modal-procure-grn" className="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                        <h3 className="font-bold text-base text-slate-900 flex items-center gap-2">
+                            <i className="fa-solid fa-boxes-packing text-teal-600"></i> Log Inward Goods Received Note (GRN)
+                        </h3>
+                        <button onClick={() => {}} className="text-slate-400 hover:text-slate-600"><i className="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                    <form onSubmit={(e) => e.preventDefault()} className="space-y-3.5">
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">GRN Number</label>
+                                <input id="procure-grn-num" type="text" required defaultValue="ADT-GRN-2026-003" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">PO Reference</label>
+                                <input id="procure-grn-po" type="text" required defaultValue="ADT/PO/2026/001" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-[11px] font-semibold text-slate-600 mb-1">Item Description</label>
+                            <input id="procure-grn-desc" type="text" required defaultValue="Apple Magic Keyboards & Multi-touch Trackpads x 4" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div className="grid grid-cols-3 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Qty Ordered</label>
+                                <input id="procure-grn-ord" type="number" step="1" required defaultValue="4" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Qty Received</label>
+                                <input id="procure-grn-recv" type="number" step="1" required defaultValue="4" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Qty Accepted</label>
+                                <input id="procure-grn-acc" type="number" step="1" required defaultValue="4" className="w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold text-emerald-700" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Delivery Challan</label>
+                                <input id="procure-grn-dc" type="text" defaultValue="DC-NEX-9902" className="w-full px-3 py-2 border rounded-lg text-xs font-mono" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-semibold text-slate-600 mb-1">Warehouse Location</label>
+                                <input id="procure-grn-loc" type="text" defaultValue="Horamavu Bangalore HQ" className="w-full px-3 py-2 border rounded-lg text-xs" />
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2 border-t">
+                            <button type="button" onClick={() => {}} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium">Cancel</button>
+                            <button type="submit" className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-lg transition shadow">Accept Inward GRN</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+            {/* VIEW: GUARDRAILS, ENTERPRISE ARCHITECTURES & FLOWCHARTS */}
+    </div>
+  );
+};
+
+export default VendorPortalView;

@@ -1,0 +1,371 @@
+<section id="view-operations" class="module-view hidden space-y-6">
+                <!-- Header Banner -->
+                <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-6 rounded-2xl border border-slate-700/80 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs uppercase tracking-wider mb-1">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            Core Engine &bull; Module 22 &bull; ISO 27001 A.12.4 &bull; SOC 2 CC7.2 &bull; DPDP Act 2023
+                        </div>
+                        <h2 class="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+                            <i class="fa-solid fa-cube text-cyan-400"></i> Enterprise Operations, BCP/DR & Cryptographic Event Ledger
+                        </h2>
+                        <p class="text-sm text-slate-300 mt-1 max-w-3xl">
+                            Tamper-evident SHA-256 event sourcing ledger, automated hot-standby BCP/DR restore drill simulators, statutory India DPDP Act 2023 consent records, and SRE database optimization watchdog.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="verifyEventLedger()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Verify Cryptographic Ledger
+                        </button>
+                        <button onclick="openModal('modal-create-backup-snapshot')" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Create Hot Snapshot
+                        </button>
+                        <button onclick="triggerDBVacuum()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-broom"></i> Checkpoint & Vacuum
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Executive Operational Telemetry Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow">
+                        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Cryptographic Ledger</div>
+                        <div id="ops-stat-events-count" class="text-2xl font-black text-white mt-1">--</div>
+                        <div id="ops-stat-ledger-status" class="text-[11px] font-mono text-emerald-400 mt-0.5 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check"></i> SHA-256 Chained
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow">
+                        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Recovery Point (RPO)</div>
+                        <div class="text-2xl font-black text-cyan-400 mt-1">&lt; 15m</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Continuous WAL Sync</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow">
+                        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Recovery Time (RTO)</div>
+                        <div class="text-2xl font-black text-emerald-400 mt-1">&lt; 5m</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Automated Sandbox Mount</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow">
+                        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total BCP Snapshots</div>
+                        <div id="ops-stat-snapshots-count" class="text-2xl font-black text-indigo-400 mt-1">--</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">AES-256 Encrypted</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow">
+                        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">DPDP Statutory Consents</div>
+                        <div id="ops-stat-consents-count" class="text-2xl font-black text-amber-400 mt-1">--</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">India DPDP Act 2023</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow">
+                        <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">DB Size & Latency</div>
+                        <div id="ops-stat-db-size" class="text-xl font-black text-white mt-1">--</div>
+                        <div id="ops-stat-latency" class="text-[11px] font-mono text-purple-400 mt-0.5">Query: -- ms</div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <div class="border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <button onclick="switchOperationsTab('ledger')" id="btn-ops-tab-ledger" class="px-4 py-2.5 text-xs font-bold border-b-2 border-cyan-500 text-cyan-400 flex items-center gap-2">
+                            <i class="fa-solid fa-link"></i> Cryptographic Event Ledger
+                        </button>
+                        <button onclick="switchOperationsTab('bcp-dr')" id="btn-ops-tab-bcp-dr" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> BCP/DR Snapshots & Drills
+                        </button>
+                        <button onclick="switchOperationsTab('dpdp')" id="btn-ops-tab-dpdp" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield"></i> DPDP Consent Register
+                        </button>
+                        <button onclick="switchOperationsTab('telemetry')" id="btn-ops-tab-telemetry" class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-gauge-high"></i> SRE Telemetry & Maintenance
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2 py-1">
+                        <span id="ops-last-verified-tag" class="text-[11px] font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+                            Genesis: 0000000000000000...
+                        </span>
+                    </div>
+                </div>
+
+                <!-- TAB 1: Cryptographic Event Ledger -->
+                <div id="ops-tab-ledger" class="space-y-4">
+                    <div class="bg-slate-900/70 border border-slate-800/80 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <i class="fa-solid fa-fingerprint text-cyan-400 text-base"></i>
+                            <div>
+                                <span class="font-bold text-white">SHA-256 Hash Chain Integrity:</span>
+                                <span class="text-slate-400 ml-1">Each block derives its signature from the previous block hash, immutable payload JSON, and timestamp.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select id="ops-filter-aggregate-type" onchange="loadOperationsLedger()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                                <option value="">All Aggregates</option>
+                                <option value="SYSTEM">SYSTEM</option>
+                                <option value="BOARD_GOVERNANCE">BOARD_GOVERNANCE</option>
+                                <option value="STATUTORY_FINANCE">STATUTORY_FINANCE</option>
+                                <option value="ITSM_CHANGE">ITSM_CHANGE</option>
+                                <option value="CLIENT_DELIVERY">CLIENT_DELIVERY</option>
+                                <option value="BCP_DR_SNAPSHOT">BCP_DR_SNAPSHOT</option>
+                                <option value="DPDP_CONSENT">DPDP_CONSENT</option>
+                                <option value="SRE_MAINTENANCE">SRE_MAINTENANCE</option>
+                            </select>
+                            <button onclick="loadOperationsLedger()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                                        <th class="py-3 px-4">Event Code</th>
+                                        <th class="py-3 px-4">Aggregate Target</th>
+                                        <th class="py-3 px-4">Event Type</th>
+                                        <th class="py-3 px-4">Initiated By / Role</th>
+                                        <th class="py-3 px-4 font-mono">Current SHA-256 Hash</th>
+                                        <th class="py-3 px-4 font-mono">Prev Hash</th>
+                                        <th class="py-3 px-4">Timestamp (UTC)</th>
+                                        <th class="py-3 px-4 text-right">Payload</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ops-ledger-table-body" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                                    <tr>
+                                        <td colspan="8" class="text-center py-8 text-slate-500">Loading tamper-evident event stream...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: BCP/DR Snapshots & Drills -->
+                <div id="ops-tab-bcp-dr" class="hidden space-y-4">
+                    <div class="bg-slate-900/70 border border-slate-800/80 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <i class="fa-solid fa-shield-virus text-indigo-400 text-base"></i>
+                            <div>
+                                <span class="font-bold text-white">Disaster Recovery SLA Commitment:</span>
+                                <span class="text-slate-400 ml-1">RPO &le; 15 mins (WAL incremental log checkpoints), RTO &le; 5 mins (hot sandbox restore test).</span>
+                            </div>
+                        </div>
+                        <button onclick="openModal('modal-create-backup-snapshot')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> New Snapshot
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="ops-snapshots-grid">
+                        <div class="p-6 text-center text-slate-500 col-span-3">Loading disaster recovery snapshots...</div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: DPDP Consent Register -->
+                <div id="ops-tab-dpdp" class="hidden space-y-4">
+                    <div class="bg-slate-900/70 border border-slate-800/80 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                        <div class="flex items-center gap-2 text-slate-300">
+                            <i class="fa-solid fa-scale-balanced text-amber-400 text-base"></i>
+                            <div>
+                                <span class="font-bold text-white">India DPDP Act 2023 Statutory Consent Register:</span>
+                                <span class="text-slate-400 ml-1">Affirmative consent records for employees, client sponsors, and vendor representatives.</span>
+                            </div>
+                        </div>
+                        <button onclick="openModal('modal-record-dpdp-consent')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Record New Consent
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                                        <th class="py-3 px-4">Consent Ref</th>
+                                        <th class="py-3 px-4">Principal Name & Type</th>
+                                        <th class="py-3 px-4">Identifier / Contact</th>
+                                        <th class="py-3 px-4">Purpose Category</th>
+                                        <th class="py-3 px-4">Notice Reference</th>
+                                        <th class="py-3 px-4">Status</th>
+                                        <th class="py-3 px-4">Granted At (UTC)</th>
+                                        <th class="py-3 px-4">DPO Officer</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ops-dpdp-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                                    <tr>
+                                        <td colspan="8" class="text-center py-8 text-slate-500">Loading DPDP statutory consent records...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SRE Telemetry & Maintenance -->
+                <div id="ops-tab-telemetry" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Host Database Telemetry -->
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-database text-purple-400"></i> SQLite Host Telemetry & Storage Engine
+                                </h3>
+                                <button onclick="loadOperationsTelemetry()" class="text-xs text-purple-400 hover:text-purple-300 font-mono">
+                                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                                </button>
+                            </div>
+                            <div class="space-y-3 text-xs">
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                                    <span class="text-slate-400 font-medium">Primary SQLite Database Size</span>
+                                    <span id="tel-db-size" class="font-mono font-bold text-white">--</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                                    <span class="text-slate-400 font-medium">Write-Ahead Log (WAL) Buffer</span>
+                                    <span id="tel-wal-size" class="font-mono font-bold text-cyan-400">--</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                                    <span class="text-slate-400 font-medium">WAL Checkpoint Mode</span>
+                                    <span id="tel-wal-mode" class="font-mono text-emerald-400 font-bold">OPTIMAL_WAL_MODE</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                                    <span class="text-slate-400 font-medium">Real-Time Query Latency (SELECT 1)</span>
+                                    <span id="tel-query-latency" class="font-mono font-bold text-emerald-300">-- ms</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                                    <span class="text-slate-400 font-medium">Resident Memory Footprint (RSS)</span>
+                                    <span id="tel-memory-rss" class="font-mono font-bold text-indigo-300">-- MB</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Maintenance & Vacuum Actions -->
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-wrench text-amber-400"></i> Autonomous SRE Storage Maintenance
+                                </h3>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Auto-Managed</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Executing a database vacuum forces SQLite to truncate its Write-Ahead Log (<code class="bg-slate-950 px-1 py-0.5 rounded text-cyan-300">PRAGMA wal_checkpoint(TRUNCATE)</code>), reclaims unallocated file pages, and guarantees zero lock contention across concurrent read/write threads.
+                            </p>
+                            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 text-xs">
+                                <div class="font-semibold text-slate-200">Zero-Downtime Guarantee:</div>
+                                <div class="text-slate-400 text-[11px]">
+                                    Vacuum runs asynchronously inside an isolated transaction block. All open HTTP sessions and WebSocket streams remain 100% operational with sub-5ms query response times.
+                                </div>
+                            </div>
+                            <div class="pt-2">
+                                <button onclick="triggerDBVacuum()" class="w-full py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-broom"></i> Execute Instant Database Vacuum & WAL Checkpoint
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OPERATIONS MODAL 1: Create Backup Snapshot -->
+            <div id="modal-create-backup-snapshot" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+                <div class="bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 max-w-lg w-full overflow-hidden">
+                    <div class="p-4 bg-gradient-to-r from-blue-900 to-indigo-950 text-white flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i>
+                            <h3 class="font-bold text-sm">Create Hot BCP/DR Snapshot</h3>
+                        </div>
+                        <button onclick="closeModal('modal-create-backup-snapshot')" class="text-slate-400 hover:text-white p-1">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                    </div>
+                    <form onsubmit="handleCreateBackupSnapshot(event)" class="p-5 space-y-4 text-xs">
+                        <div>
+                            <label class="block font-medium text-slate-300 mb-1">Backup Type</label>
+                            <select id="ops-new-snapshot-type" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500">
+                                <option value="Full SQLite Hot Backup">Full SQLite Hot Backup</option>
+                                <option value="Incremental WAL Snapshot">Incremental WAL Snapshot</option>
+                                <option value="Cold Disaster Recovery Archive">Cold Disaster Recovery Archive</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-medium text-slate-300 mb-1">Operational Notes / Reason</label>
+                            <textarea id="ops-new-snapshot-notes" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500" placeholder="e.g. Scheduled pre-deployment production snapshot for enterprise release v2.0"></textarea>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] text-slate-400 space-y-1">
+                            <div class="text-cyan-400 font-semibold">Automatic Integrity Guarantees:</div>
+                            <div>&bull; Real-time SHA-256 binary hash digest generated upon disk write.</div>
+                            <div>&bull; Envelope encrypted under AES-256-GCM.</div>
+                            <div>&bull; Recorded to tamper-evident cryptographic event ledger.</div>
+                        </div>
+                        <div class="flex items-center justify-end gap-2 pt-2">
+                            <button type="button" onclick="closeModal('modal-create-backup-snapshot')" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium">Cancel</button>
+                            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Generate Snapshot
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- OPERATIONS MODAL 2: Record DPDP Consent -->
+            <div id="modal-record-dpdp-consent" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+                <div class="bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 max-w-lg w-full overflow-hidden">
+                    <div class="p-4 bg-gradient-to-r from-amber-900 to-slate-900 text-white flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+                            <h3 class="font-bold text-sm">Record India DPDP Act 2023 Consent</h3>
+                        </div>
+                        <button onclick="closeModal('modal-record-dpdp-consent')" class="text-slate-400 hover:text-white p-1">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                    </div>
+                    <form onsubmit="handleRecordDPDPConsent(event)" class="p-5 space-y-4 text-xs">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Principal Name</label>
+                                <input type="text" id="ops-dpdp-name" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500" placeholder="e.g. Rahul Verma">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Principal Type</label>
+                                <select id="ops-dpdp-type" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                                    <option value="Employee">Employee</option>
+                                    <option value="Client Sponsor">Client Sponsor</option>
+                                    <option value="Vendor Contact">Vendor Contact</option>
+                                    <option value="Job Candidate">Job Candidate</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Identifier (Email / Code)</label>
+                                <input type="text" id="ops-dpdp-identifier" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500" placeholder="e.g. rahul.v@asperion.in">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Purpose Category</label>
+                                <select id="ops-dpdp-purpose" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                                    <option value="Statutory Payroll & Wage Code Processing">Statutory Payroll & Wage Code Processing</option>
+                                    <option value="Client Contract Execution & Billing">Client Contract Execution & Billing</option>
+                                    <option value="Biometric Geofence & Webcam Verification">Biometric Geofence & Webcam Verification</option>
+                                    <option value="Vendor Sourcing & AP Remittance">Vendor Sourcing & AP Remittance</option>
+                                    <option value="Statutory Directorship & MCA Filings">Statutory Directorship & MCA Filings</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-medium text-slate-300 mb-1">Notice Reference</label>
+                            <input type="text" id="ops-dpdp-notice" value="ADT/DPDP/NOTICE/2026/V1" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label class="block font-medium text-slate-300 mb-1">Attestation / Audit Notes</label>
+                            <textarea id="ops-dpdp-notes" rows="2" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500" placeholder="Affirmative clickwrap consent registered with IP attestation."></textarea>
+                        </div>
+                        <div class="flex items-center justify-end gap-2 pt-2">
+                            <button type="button" onclick="closeModal('modal-record-dpdp-consent')" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium">Cancel</button>
+                            <button type="submit" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-check"></i> Register Statutory Consent
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- OPERATIONS MODAL 3: Event Payload Viewer -->
+            <!-- ========================================== -->
+            <!-- 23. CRYPTOGRAPHIC & PKI TOOLS WORKBENCH VIEW  -->
+            <!-- ========================================== -->

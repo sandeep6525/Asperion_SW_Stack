@@ -1,0 +1,386 @@
+// @ts-ignore
+import { loadProcurement } from '../utils/dataLoaders.js';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+export const ProcurementView: React.FC = () => {
+  useEffect(() => {
+    try {
+      loadProcurement();
+    } catch (e) {
+      console.error('Error in loadProcurement:', e);
+    }
+  }, []);
+
+  return (
+    <div className="w-full">
+      <section id="view-procurement" className="module-view ">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">CIPS & ISO 20400 Standard</span>
+                            <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800 border border-blue-200">MSMED Act 2006 (45-Day Rule)</span>
+                            <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">DPDP Act 2023 DPA Enforced</span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-slate-900">Vendor Management & Strategic Sourcing Cockpit</h2>
+                        <p className="text-sm text-slate-500">End-to-end strategic procurement: spend requisitions, e-RFX competitive events, approved vendor due diligence, CLM, GRN inspection, and third-party risk.</p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <button onClick={() => {}} className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                            <i className="fa-solid fa-file-invoice-dollar"></i> New Spend PR
+                        </button>
+                        <button onClick={() => {}} className="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                            <i className="fa-solid fa-bullhorn"></i> New Sourcing Event
+                        </button>
+                        <button onClick={() => {}} className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                            <i className="fa-solid fa-handshake"></i> Onboard Vendor
+                        </button>
+                        <button onClick={() => {}} className="px-3.5 py-2 bg-slate-700 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow flex items-center gap-1.5">
+                            <i className="fa-solid fa-boxes-packing"></i> Log GRN Receipt
+                        </button>
+                    </div>
+                </div>
+
+                {/* 8 Procurement KPI Telemetry Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Total Managed Spend</span>
+                            <i className="fa-solid fa-indian-rupee-sign text-emerald-600"></i>
+                        </div>
+                        <div id="kpi-procure-spend" className="text-xl font-bold text-slate-900">₹16.65 L</div>
+                        <div className="text-[11px] text-emerald-600 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-check-circle"></i> 5 Approved Vendors
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">MSME Spend Share</span>
+                            <i className="fa-solid fa-building-wheat text-amber-600"></i>
+                        </div>
+                        <div id="kpi-procure-msme" className="text-xl font-bold text-amber-700">48.9%</div>
+                        <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-clock"></i> MSMED Act 45-day Rule
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Realized Sourcing Savings</span>
+                            <i className="fa-solid fa-piggy-bank text-indigo-600"></i>
+                        </div>
+                        <div id="kpi-procure-savings" className="text-xl font-bold text-indigo-700">₹74,000</div>
+                        <div className="text-[11px] text-indigo-600 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-arrow-trend-up"></i> 11.4% BAFO Reduction
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Spend Requisitions (PR)</span>
+                            <i className="fa-solid fa-clipboard-check text-blue-600"></i>
+                        </div>
+                        <div id="kpi-procure-prs" className="text-xl font-bold text-blue-700">4 PRs</div>
+                        <div className="text-[11px] text-emerald-600 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-circle-check"></i> 3 Approved / PO Linked
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Active e-RFX Sourcing</span>
+                            <i className="fa-solid fa-gavel text-purple-600"></i>
+                        </div>
+                        <div id="kpi-procure-events" className="text-xl font-bold text-purple-700">3 Events</div>
+                        <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-layer-group"></i> 5 Sourcing Categories
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Active Contracts (CLM)</span>
+                            <i className="fa-solid fa-file-contract text-cyan-600"></i>
+                        </div>
+                        <div id="kpi-procure-contracts" className="text-xl font-bold text-cyan-800">₹13.20 L/yr</div>
+                        <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-bell"></i> 0 Expiring in 90 Days
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Inbound GRN Inspection</span>
+                            <i className="fa-solid fa-box-open text-teal-600"></i>
+                        </div>
+                        <div id="kpi-procure-grns" className="text-xl font-bold text-teal-700">100% Passed</div>
+                        <div className="text-[11px] text-teal-600 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-shield"></i> 3-Way Match Verified
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                            <span className="font-medium">Avg Vendor Rating</span>
+                            <i className="fa-solid fa-star text-amber-500"></i>
+                        </div>
+                        <div id="kpi-procure-rating" className="text-xl font-bold text-amber-700">96.3 / 100</div>
+                        <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                            <i className="fa-solid fa-trophy"></i> Strategic Partner Tier
+                        </div>
+                    </div>
+                </div>
+
+                {/* Section 1: Strategic Sourcing e-RFX Pipeline & BAFO Evaluations */}
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <i className="fa-solid fa-bullhorn text-purple-600"></i> Strategic Sourcing e-RFX Pipeline & Competitive Bidding (RFP / RFQ / BAFO)
+                        </h3>
+                        <span className="text-xs text-slate-500">Weighted Multi-Criteria Evaluation (Tech 40%, Comm 30%, SecOps 20%, SLA 10%)</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                            <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th className="p-2.5">Event Code</th>
+                                    <th className="p-2.5">Type</th>
+                                    <th className="p-2.5">Title & Sourcing Scope</th>
+                                    <th className="p-2.5">Category</th>
+                                    <th className="p-2.5">Budget Allocation</th>
+                                    <th className="p-2.5">Baseline Cost</th>
+                                    <th className="p-2.5">Awarded Vendor / Savings</th>
+                                    <th className="p-2.5">Closing Date</th>
+                                    <th className="p-2.5">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-sourcing-events"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Section 2: Purchase Requisitions (PR to PO Approval Flow) */}
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <i className="fa-solid fa-file-invoice-dollar text-blue-600"></i> Purchase Requisitions (PR to PO Governance Flow)
+                        </h3>
+                        <span className="text-xs text-slate-500">Departmental Delegation of Authority (DOA) & Director Sign-Off</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                            <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th className="p-2.5">PR Number</th>
+                                    <th className="p-2.5">Requester & Dept</th>
+                                    <th className="p-2.5">Category</th>
+                                    <th className="p-2.5">Item Scope & Justification</th>
+                                    <th className="p-2.5">Est Amount (INR)</th>
+                                    <th className="p-2.5">Urgency</th>
+                                    <th className="p-2.5">Approval Status</th>
+                                    <th className="p-2.5">Approved By</th>
+                                    <th className="p-2.5">Linked PO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-purchase-requisitions"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Section 3 & 4: Approved Vendors Master & Contract Lifecycle (CLM) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                                <i className="fa-solid fa-truck-field text-blue-600"></i> Approved Vendors Master & KYC Due Diligence
+                            </h3>
+                            <span className="text-xs text-slate-400">MSMED 45-day Rule Enforced</span>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                    <tr>
+                                        <th className="p-2.5">Code</th>
+                                        <th className="p-2.5">Vendor Name</th>
+                                        <th className="p-2.5">Category & Tier</th>
+                                        <th className="p-2.5">MSME & DUNS</th>
+                                        <th className="p-2.5">KYC / DPDP</th>
+                                        <th className="p-2.5">Annual Spend</th>
+                                        <th className="p-2.5">Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vendors"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                                <i className="fa-solid fa-file-contract text-emerald-600"></i> Contract Lifecycle Management (CLM) & Renewals
+                            </h3>
+                            <span className="text-xs text-slate-400">Auto-Renewal & Notice Period Alerts</span>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                    <tr>
+                                        <th className="p-2.5">Contract Ref</th>
+                                        <th className="p-2.5">Agreement Type</th>
+                                        <th className="p-2.5">Validity Period</th>
+                                        <th className="p-2.5">Annual Value</th>
+                                        <th className="p-2.5">SLA Uptime</th>
+                                        <th className="p-2.5">Notice</th>
+                                        <th className="p-2.5">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vendor-contracts"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Section 5: Inbound Fulfillment & Goods Received Notes (GRN - 3-Way Match) */}
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <i className="fa-solid fa-boxes-packing text-teal-600"></i> Inbound Fulfillment & Goods Received Notes (GRN - 3-Way Match Inspection)
+                        </h3>
+                        <span className="text-xs text-slate-500">100% Quality Acceptance against Purchase Orders before AP Bill Payment</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                            <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th className="p-2.5">GRN Number</th>
+                                    <th className="p-2.5">PO Reference</th>
+                                    <th className="p-2.5">Delivery Challan</th>
+                                    <th className="p-2.5">Received Date</th>
+                                    <th className="p-2.5">Item Description</th>
+                                    <th className="p-2.5">Qty (Ord / Recv / Acc)</th>
+                                    <th className="p-2.5">Location</th>
+                                    <th className="p-2.5">Inspection Status</th>
+                                    <th className="p-2.5">Inspector</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-grns"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Section 6: Vendor Performance (QBR), Third-Party Risk (TPRM) & CAPA */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    {/* QBR Scorecards */}
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm">
+                            <i className="fa-solid fa-star-half-stroke text-amber-600"></i> Performance Scorecards (QBR)
+                        </h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th className="p-2">Period</th>
+                                        <th className="p-2">Vendor</th>
+                                        <th className="p-2">Overall</th>
+                                        <th className="p-2">Tier</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-scorecards"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Third-Party Risk Assessments */}
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm">
+                            <i className="fa-solid fa-shield-halved text-rose-600"></i> Third-Party Risk (TPRM)
+                        </h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th className="p-2">Vendor</th>
+                                        <th className="p-2">Data Access</th>
+                                        <th className="p-2">ISO / SOC2</th>
+                                        <th className="p-2">Residual Risk</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vendor-risks"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* CAPA Corrective Action Plans */}
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2 text-sm">
+                            <i className="fa-solid fa-wrench text-indigo-600"></i> Vendor CAPA Action Plans
+                        </h3>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] border-b">
+                                    <tr>
+                                        <th className="p-2">CAPA Ref</th>
+                                        <th className="p-2">Vendor</th>
+                                        <th className="p-2">Remediation</th>
+                                        <th className="p-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-vendor-capas"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Section 7: Sourcing Categories Master */}
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <i className="fa-solid fa-layer-group text-slate-700"></i> Sourcing Category Spend Architecture & Preferred Panels
+                        </h3>
+                        <span className="text-xs text-slate-500">Corporate Spend Governance & Strategic Sourcing Allocations</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                            <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th className="p-2.5">Category Code</th>
+                                    <th className="p-2.5">Category Name</th>
+                                    <th className="p-2.5">Annual Budget (INR)</th>
+                                    <th className="p-2.5">Sourcing Strategy</th>
+                                    <th className="p-2.5">Lead Buyer</th>
+                                    <th className="p-2.5">Active Vendors</th>
+                                    <th className="p-2.5">ESG Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-sourcing-categories"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Section 8: Legacy 3-Quote RFP Comparative Statements */}
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i className="fa-solid fa-code-compare text-purple-600"></i> Legacy 3-Quote Comparative Statements & Commercial Justification
+                    </h3>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                            <thead className="bg-slate-50 text-slate-600 uppercase text-[11px] border-b">
+                                <tr>
+                                    <th className="p-2.5">RFP Ref</th>
+                                    <th className="p-2.5">Requirement Title</th>
+                                    <th className="p-2.5">Vendor Option A</th>
+                                    <th className="p-2.5">Vendor Option B</th>
+                                    <th className="p-2.5">Selected Vendor</th>
+                                    <th className="p-2.5">Commercial Justification</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-rfp-comparison"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+            {/* 8. Infrastructure View */}
+    </div>
+  );
+};
+
+export default ProcurementView;
